@@ -368,7 +368,6 @@ class UPeptideMapper( dict ):
 
             # sorted 3.8GB
             s_pep = ''.join(sorted(pep))
-            # s_pep = pep
             # print(s_pep, type(s_pep))
             try:
                 self[ fasta_name ][ s_pep ].add( (id, pos + 1) )
@@ -450,10 +449,7 @@ class UPeptideMapper( dict ):
                         pep = peptide[ pos : pos + self.word_len ]
                         # pep = pep.encode()
                         # print( pep, peptide )
-
                         s_pep = ''.join(sorted(pep))
-                        # s_pep = pep
-
                         fasta_set = self[ fasta_name ].get(s_pep, None)
                         if fasta_set is None:
                             continue
