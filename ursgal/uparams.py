@@ -1,4 +1,349 @@
 ursgal_params = {
+    'MetFrag_database_type' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'metfrag_2_3_1'
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'metfrag_style_1' : 'MetFragDatabaseType'
+        },
+        'utag' : [
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'str',
+        'uvalue_option' : {
+            'none_val'         : '',
+            'multiple_line'    : False,
+            'input_extensions' : ['.fasta', '.fa'],
+        },
+        'default_value' : 'PubChem',
+        'description' : 'bla',
+    },
+    #'MetFrag_neutral_precursor_mol_formula' : {
+    #},
+    #'MetFrag_ionized_precursor_mol_formula' : {
+    #},
+    #'MetFrag_score_type' : {
+    #},
+    #'MetFrag_score_weights' : {
+    #},
+    #'MetFrag_output_type' : {
+    #},
+    #'MetFrag_maximum_tree_depth' : {
+    #},
+    #'MetFrag_preprocessing_candidate_filter': {
+    #},
+    #'MetFrag_postprocessing_candidate_filter' : {
+    #},
+    #'MetFrag_ion_mode' : {
+    #},
+    #'MetFrag_database_type' : {
+    #},
+    'database' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'kojak_1_5_3',
+            'moda_v1_51',
+            'msamanda_1_0_0_5242',
+            'msamanda_1_0_0_5243',
+            'msamanda_1_0_0_6299',
+            'msamanda_1_0_0_6300',
+            'msamanda_1_0_0_7503',
+            'msamanda_1_0_0_7504',
+            'msgfplus_v2016_09_16',
+            'msgfplus_v2017_01_27',
+            'msgfplus_v9979',
+            'myrimatch_2_1_138',
+            'myrimatch_2_2_140',
+            'omssa_2_1_9',
+            'unify_csv_1_0_0',
+            'xtandem_cyclone_2010',
+            'xtandem_jackhammer',
+            'xtandem_piledriver',
+            'xtandem_sledgehammer',
+            'xtandem_vengeance',
+            'xtandem_alanine',
+            'upeptide_mapper_1_0_0',
+            'compomics_utilities_4_11_5',
+            'msfragger_20170103',
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'kojak_style_1'               : 'database',
+            'moda_style_1'                : 'Fasta',
+            'msamanda_style_1'            : 'database',
+            'msgfplus_style_1'            : '-d',
+            'myrimatch_style_1'           : 'ProteinDatabase',
+            'omssa_style_1'               : '-d',
+            'unify_csv_style_1'           : 'database',
+            'xtandem_style_1'             : 'file URL',
+            'upeptide_mapper_style_1'     : 'database',
+            'compomics_utilities_style_1' : 'database',
+            'msfragger_style_1'           : 'database_name'
+
+        },
+        'utag' : [
+            'database',
+            'input',
+            'input_files',
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'str',
+        'uvalue_option' : {
+            'none_val'         : '',
+            'multiple_line'    : False,
+            'input_extensions' : ['.fasta', '.fa'],
+        },
+        'default_value' : None,
+        'description' : \
+            'Path to database file containing protein sequences in fasta format\n'\
+            '    \'\' : None',
+    },
+    #'MetFrag_Precursor_mol_formula' : {
+    #},
+    #'MetFrag_neutral_precursor_mass' : {
+    #},
+    #'MetFrag_ionized_precursor_mass' : {
+    #},
+    'frag_mass_tolerance' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'moda_v1_51',
+            'msamanda_1_0_0_5242',
+            'msamanda_1_0_0_5243',
+            'msamanda_1_0_0_6299',
+            'msamanda_1_0_0_6300',
+            'msamanda_1_0_0_7503',
+            'msamanda_1_0_0_7504',
+            'myrimatch_2_1_138',
+            'myrimatch_2_2_140',
+            'novor_1_1beta',
+            'omssa_2_1_9',
+            'pepnovo_3_1',
+            'xtandem_cyclone_2010',
+            'xtandem_jackhammer',
+            'xtandem_piledriver',
+            'xtandem_sledgehammer',
+            'xtandem_vengeance',
+            'xtandem_alanine',
+            'msfragger_20170103',
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'moda_style_1'      : 'FragTolerance',
+            'msamanda_style_1'  : 'ms2_tol',
+            'myrimatch_style_1' : 'FragmentMzTolerance',
+            'novor_style_1'     : 'fragmentIonErrorTol',
+            'omssa_style_1'     : '-to',
+            'pepnovo_style_1'   : '-fragment_tolerance',
+            'xtandem_style_1'   : 'spectrum, fragment monoisotopic mass error',
+            'msfragger_style_1' : 'fragment_mass_tolerance'
+        },
+        'utag' : [
+            'fragment',
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'int',
+        'uvalue_option' : {
+            'none_val'  : None,
+            'max'       : 100000,
+            'min'       : 0,
+            'updownval' : 1,
+            'unit'      : ''
+        },
+        'default_value' : 20,
+        'description' : \
+            'Mass tolerance of measured and calculated fragment ions',
+    },
+    'frag_mass_tolerance_unit' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'moda_v1_51',
+            'msamanda_1_0_0_5242',
+            'msamanda_1_0_0_5243',
+            'msamanda_1_0_0_6299',
+            'msamanda_1_0_0_6300',
+            'msamanda_1_0_0_7503',
+            'msamanda_1_0_0_7504',
+            'myrimatch_2_1_138',
+            'myrimatch_2_2_140',
+            'novor_1_1beta',
+            'omssa_2_1_9',
+            'pepnovo_3_1',
+            'xtandem_cyclone_2010',
+            'xtandem_jackhammer',
+            'xtandem_piledriver',
+            'xtandem_sledgehammer',
+            'xtandem_vengeance',
+            'xtandem_alanine',
+            'msfragger_20170103',
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'moda_style_1'      : 'FragTolerance',
+            'msamanda_style_1'  : 'ms2_tol unit',
+            'myrimatch_style_1' : 'FragmentMzTolerance',
+            'novor_style_1'     : 'fragmentIonErrorTol',
+            'omssa_style_1'     : 'frag_mass_tolerance_unit',
+            'pepnovo_style_1'   : 'frag_mass_tolerance_unit',
+            'xtandem_style_1'   : 'spectrum, fragment monoisotopic mass error units',
+            'msfragger_style_1' : 'fragment_mass_units'
+        },
+        'utag' : [
+            'fragment',
+        ],
+        'uvalue_translation' : {
+            'msamanda_style_1' : {
+                'da' : 'Da',
+            },
+            'myrimatch_style_1' : {
+                'da' : 'Da',
+            },
+            'novor_style_1' : {
+                'da' : 'Da',
+            },
+            'omssa_style_1' : {
+                'da' : 'Da',
+            },
+            'xtandem_style_1' : {
+                'da' : 'Daltons',
+            },
+            'msfragger_style_1' : {
+                'ppm' : 1,
+                'da'  : 0 
+            }
+        },
+        'uvalue_type' : 'select',
+        'uvalue_option' : {
+            'combo_box'      : True,
+            'radio_button'   : False,
+            'initial_value'  : ['da', 'mmu', 'ppm'],
+            'custom_val_max' : 0,
+        },
+        'default_value' : 'ppm',
+        'description' : \
+            'Fragment mass tolerance unit: available in ppm '\
+            '(parts-per-millon), da (Dalton) or mmu (Milli mass unit)',
+    },
+    'output_file_incl_path' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'generate_target_decoy_1_0_0',
+            'merge_csvs_1_0_0',
+            'moda_v1_51',
+            'msamanda_1_0_0_5242',
+            'msamanda_1_0_0_5243',
+            'msamanda_1_0_0_6299',
+            'msamanda_1_0_0_6300',
+            'msamanda_1_0_0_7503',
+            'msamanda_1_0_0_7504',
+            'msgfplus_v2016_09_16',
+            'msgfplus_v2017_01_27',
+            'msgfplus_v9979',
+            'myrimatch_2_1_138',
+            'myrimatch_2_2_140',
+            'mzidentml_lib_1_6_10',
+            'mzidentml_lib_1_6_11',
+            'mzidentml_lib_1_7',
+            'novor_1_1beta',
+            'omssa_2_1_9',
+            'pepnovo_3_1',
+            'percolator_2_08',
+            'qvality_2_02',
+            'venndiagram_1_0_0',
+            'xtandem_cyclone_2010',
+            'xtandem_jackhammer',
+            'xtandem_piledriver',
+            'xtandem_sledgehammer',
+            'xtandem_vengeance',
+            'xtandem_alanine',
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'generate_target_decoy_style_1' : 'output_file',
+            'merge_csvs_style_1'             : 'output',
+            'moda_style_1'                  : '-o',
+            'msamanda_style_1'              : 'output_file_incl_path',
+            'msgfplus_style_1'              : '-o',
+            'myrimatch_style_1'             : 'output_file_incl_path',
+            'mzidentml_style_1'             : 'output_file_incl_path',
+            'novor_style_1'                 : 'output_file_incl_path',
+            'omssa_style_1'                 : 'output_file_incl_path',
+            'pepnovo_style_1'               : 'output_file_incl_path',
+            'percolator_style_1'            : 'output_file_incl_path',
+            'qvality_style_1'               : '-o',
+            'venndiagram_style_1'           : 'output_file',
+            'xtandem_style_1'               : 'output, path',
+        },
+        'utag' : [
+            'output',
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'str',
+        'uvalue_option' : {
+            'none_val'      : 'None',
+            'multiple_line' : False,
+        },
+        'default_value' : None,
+        'description' : \
+            'Path to output file\n'\
+            '    \'None\' : None',
+    },
+    'output_file_type' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'omssa_2_1_9',
+            'xtandem_cyclone_2010',
+            'xtandem_jackhammer',
+            'xtandem_piledriver',
+            'xtandem_sledgehammer',
+            'xtandem_vengeance',
+            'xtandem_alanine',
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'omssa_style_1'   : ('-oc', '-ox'),
+            'xtandem_style_1' : 'output, mzid',
+        },
+        'utag' : [
+            'output',
+        ],
+        'uvalue_translation' : {
+            'omssa_style_1' : {
+                '.csv'    : '-oc',
+                '.omx'    : '-ox',
+                'default' : '-oc',
+            },
+            'xtandem_style_1' : {
+                '.mzid' : 'yes',
+                'default' : 'no',
+            },
+        },
+        'uvalue_type' : 'select',
+        'uvalue_option' : {
+            'combo_box'      : True,
+            'radio_button'   : False,
+            'initial_value'  : ['.csv', '.mzid', '.omx', 'default'],
+            'custom_val_max' : 0,
+        },
+        'default_value' : 'default',
+        'description' : \
+            'Output file type. If set to \'default\', default output file '\
+            'tzpes for each engine are used. Note: not every file type is '\
+            'supported by every engine and usin non-default types might cause '\
+            'problems during conversion to .csv.',
+    },
+
     '_extentions' : {
         'edit_version'   : 1.00,
         'available_in_unode' : [
@@ -358,7 +703,6 @@ ursgal_params = {
                 },
             },
         },
-
     },
     'accept_conflicting_psms' : {
         'edit_version'   : 1.00,
@@ -1067,67 +1411,6 @@ ursgal_params = {
             'as the column name/csv fieldname, the second tuple element the '\
             'rule and the third tuple element the value which should be '\
             'compared',
-    },
-    'database' : {
-        'edit_version' : 1.00,
-        'available_in_unode' : [
-            'kojak_1_5_3',
-            'moda_v1_51',
-            'msamanda_1_0_0_5242',
-            'msamanda_1_0_0_5243',
-            'msamanda_1_0_0_6299',
-            'msamanda_1_0_0_6300',
-            'msamanda_1_0_0_7503',
-            'msamanda_1_0_0_7504',
-            'msgfplus_v2016_09_16',
-            'msgfplus_v2017_01_27',
-            'msgfplus_v9979',
-            'myrimatch_2_1_138',
-            'myrimatch_2_2_140',
-            'omssa_2_1_9',
-            'unify_csv_1_0_0',
-            'xtandem_cyclone_2010',
-            'xtandem_jackhammer',
-            'xtandem_piledriver',
-            'xtandem_sledgehammer',
-            'xtandem_vengeance',
-            'xtandem_alanine',
-            'upeptide_mapper_1_0_0',
-            'compomics_utilities_4_11_5',
-            'msfragger_20170103',
-        ],
-        'triggers_rerun' : True,
-        'ukey_translation' : {
-            'kojak_style_1'               : 'database',
-            'moda_style_1'                : 'Fasta',
-            'msamanda_style_1'            : 'database',
-            'msgfplus_style_1'            : '-d',
-            'myrimatch_style_1'           : 'ProteinDatabase',
-            'omssa_style_1'               : '-d',
-            'unify_csv_style_1'           : 'database',
-            'xtandem_style_1'             : 'file URL',
-            'upeptide_mapper_style_1'     : 'database',
-            'compomics_utilities_style_1' : 'database',
-            'msfragger_style_1'           : 'database_name'
-
-        },
-        'utag' : [
-            'database',
-            'input',
-            'input_files',
-        ],
-        'uvalue_translation' : {
-        },
-        'uvalue_type' : 'str',
-        'uvalue_option' : {
-            'none_val'         : '',
-            'multiple_line'    : False,
-            'input_extensions' : ['.fasta', '.fa'],
-        },
-        'default_value' : None,
-        'description' : \
-            'Path to database file containing protein sequences in fasta format\n'\
-            '    \'\' : None',
     },
     'database_taxonomy' : {
         'edit_version' : 1.00,
@@ -1890,127 +2173,6 @@ ursgal_params = {
         'description' : \
             'If set \'True\', engines are forced to re-run although no '\
             'node-related parameters have changed',
-    },
-    'frag_mass_tolerance' : {
-        'edit_version' : 1.00,
-        'available_in_unode' : [
-            'moda_v1_51',
-            'msamanda_1_0_0_5242',
-            'msamanda_1_0_0_5243',
-            'msamanda_1_0_0_6299',
-            'msamanda_1_0_0_6300',
-            'msamanda_1_0_0_7503',
-            'msamanda_1_0_0_7504',
-            'myrimatch_2_1_138',
-            'myrimatch_2_2_140',
-            'novor_1_1beta',
-            'omssa_2_1_9',
-            'pepnovo_3_1',
-            'xtandem_cyclone_2010',
-            'xtandem_jackhammer',
-            'xtandem_piledriver',
-            'xtandem_sledgehammer',
-            'xtandem_vengeance',
-            'xtandem_alanine',
-            'msfragger_20170103'
-        ],
-        'triggers_rerun' : True,
-        'ukey_translation' : {
-            'moda_style_1'      : 'FragTolerance',
-            'msamanda_style_1'  : 'ms2_tol',
-            'myrimatch_style_1' : 'FragmentMzTolerance',
-            'novor_style_1'     : 'fragmentIonErrorTol',
-            'omssa_style_1'     : '-to',
-            'pepnovo_style_1'   : '-fragment_tolerance',
-            'xtandem_style_1'   : 'spectrum, fragment monoisotopic mass error',
-            'msfragger_style_1' : 'fragment_mass_tolerance'
-        },
-        'utag' : [
-            'fragment',
-        ],
-        'uvalue_translation' : {
-        },
-        'uvalue_type' : 'int',
-        'uvalue_option' : {
-            'none_val'  : None,
-            'max'       : 100000,
-            'min'       : 0,
-            'updownval' : 1,
-            'unit'      : ''
-        },
-        'default_value' : 20,
-        'description' : \
-            'Mass tolerance of measured and calculated fragment ions',
-    },
-    'frag_mass_tolerance_unit' : {
-        'edit_version' : 1.00,
-        'available_in_unode' : [
-            'moda_v1_51',
-            'msamanda_1_0_0_5242',
-            'msamanda_1_0_0_5243',
-            'msamanda_1_0_0_6299',
-            'msamanda_1_0_0_6300',
-            'msamanda_1_0_0_7503',
-            'msamanda_1_0_0_7504',
-            'myrimatch_2_1_138',
-            'myrimatch_2_2_140',
-            'novor_1_1beta',
-            'omssa_2_1_9',
-            'pepnovo_3_1',
-            'xtandem_cyclone_2010',
-            'xtandem_jackhammer',
-            'xtandem_piledriver',
-            'xtandem_sledgehammer',
-            'xtandem_vengeance',
-            'xtandem_alanine',
-            'msfragger_20170103'
-        ],
-        'triggers_rerun' : True,
-        'ukey_translation' : {
-            'moda_style_1'      : 'FragTolerance',
-            'msamanda_style_1'  : 'ms2_tol unit',
-            'myrimatch_style_1' : 'FragmentMzTolerance',
-            'novor_style_1'     : 'fragmentIonErrorTol',
-            'omssa_style_1'     : 'frag_mass_tolerance_unit',
-            'pepnovo_style_1'   : 'frag_mass_tolerance_unit',
-            'xtandem_style_1'   : 'spectrum, fragment monoisotopic mass error units',
-            'msfragger_style_1' : 'fragment_mass_units'
-        },
-        'utag' : [
-            'fragment',
-        ],
-        'uvalue_translation' : {
-            'msamanda_style_1' : {
-                'da' : 'Da',
-            },
-            'myrimatch_style_1' : {
-                'da' : 'Da',
-            },
-            'novor_style_1' : {
-                'da' : 'Da',
-            },
-            'omssa_style_1' : {
-                'da' : 'Da',
-            },
-            'xtandem_style_1' : {
-                'da' : 'Daltons',
-            },
-            'msfragger_style_1' : {
-                'ppm' : 1,
-                'da'  : 0 
-            }
-        },
-        'uvalue_type' : 'select',
-        'uvalue_option' : {
-            'combo_box'      : True,
-            'radio_button'   : False,
-            'initial_value'  : ['da', 'mmu', 'ppm'],
-            'custom_val_max' : 0,
-        },
-        'default_value' : 'ppm',
-        'description' : \
-            'Fragment mass tolerance unit: available in ppm '\
-            '(parts-per-millon), da (Dalton) or mmu (Milli mass unit)',
     },
     'frag_mass_type' : {
         'edit_version' : 1.00,
@@ -5742,115 +5904,6 @@ ursgal_params = {
         'default_value' : True,
         'description' : \
             'Output cumulative probabilities.',
-    },
-    'output_file_incl_path' : {
-        'edit_version' : 1.00,
-        'available_in_unode' : [
-            'generate_target_decoy_1_0_0',
-            'merge_csvs_1_0_0',
-            'moda_v1_51',
-            'msamanda_1_0_0_5242',
-            'msamanda_1_0_0_5243',
-            'msamanda_1_0_0_6299',
-            'msamanda_1_0_0_6300',
-            'msamanda_1_0_0_7503',
-            'msamanda_1_0_0_7504',
-            'msgfplus_v2016_09_16',
-            'msgfplus_v2017_01_27',
-            'msgfplus_v9979',
-            'myrimatch_2_1_138',
-            'myrimatch_2_2_140',
-            'mzidentml_lib_1_6_10',
-            'mzidentml_lib_1_6_11',
-            'mzidentml_lib_1_7',
-            'novor_1_1beta',
-            'omssa_2_1_9',
-            'pepnovo_3_1',
-            'percolator_2_08',
-            'qvality_2_02',
-            'venndiagram_1_0_0',
-            'xtandem_cyclone_2010',
-            'xtandem_jackhammer',
-            'xtandem_piledriver',
-            'xtandem_sledgehammer',
-            'xtandem_vengeance',
-            'xtandem_alanine',
-        ],
-        'triggers_rerun' : True,
-        'ukey_translation' : {
-            'generate_target_decoy_style_1' : 'output_file',
-            'merge_csvs_style_1'             : 'output',
-            'moda_style_1'                  : '-o',
-            'msamanda_style_1'              : 'output_file_incl_path',
-            'msgfplus_style_1'              : '-o',
-            'myrimatch_style_1'             : 'output_file_incl_path',
-            'mzidentml_style_1'             : 'output_file_incl_path',
-            'novor_style_1'                 : 'output_file_incl_path',
-            'omssa_style_1'                 : 'output_file_incl_path',
-            'pepnovo_style_1'               : 'output_file_incl_path',
-            'percolator_style_1'            : 'output_file_incl_path',
-            'qvality_style_1'               : '-o',
-            'venndiagram_style_1'           : 'output_file',
-            'xtandem_style_1'               : 'output, path',
-        },
-        'utag' : [
-            'output',
-        ],
-        'uvalue_translation' : {
-        },
-        'uvalue_type' : 'str',
-        'uvalue_option' : {
-            'none_val'      : 'None',
-            'multiple_line' : False,
-        },
-        'default_value' : None,
-        'description' : \
-            'Path to output file\n'\
-            '    \'None\' : None',
-    },
-    'output_file_type' : {
-        'edit_version' : 1.00,
-        'available_in_unode' : [
-            'omssa_2_1_9',
-            'xtandem_cyclone_2010',
-            'xtandem_jackhammer',
-            'xtandem_piledriver',
-            'xtandem_sledgehammer',
-            'xtandem_vengeance',
-            'xtandem_alanine',
-        ],
-        'triggers_rerun' : True,
-        'ukey_translation' : {
-            'omssa_style_1'   : ('-oc', '-ox'),
-            'xtandem_style_1' : 'output, mzid',
-        },
-        'utag' : [
-            'output',
-        ],
-        'uvalue_translation' : {
-            'omssa_style_1' : {
-                '.csv'    : '-oc',
-                '.omx'    : '-ox',
-                'default' : '-oc',
-            },
-            'xtandem_style_1' : {
-                '.mzid' : 'yes',
-                'default' : 'no',
-            },
-        },
-        'uvalue_type' : 'select',
-        'uvalue_option' : {
-            'combo_box'      : True,
-            'radio_button'   : False,
-            'initial_value'  : ['.csv', '.mzid', '.omx', 'default'],
-            'custom_val_max' : 0,
-        },
-        'default_value' : 'default',
-        'description' : \
-            'Output file type. If set to \'default\', default output file '\
-            'tzpes for each engine are used. Note: not every file type is '\
-            'supported by every engine and usin non-default types might cause '\
-            'problems during conversion to .csv.',
     },
     'output_prm' : {
         'edit_version' : 1.00,

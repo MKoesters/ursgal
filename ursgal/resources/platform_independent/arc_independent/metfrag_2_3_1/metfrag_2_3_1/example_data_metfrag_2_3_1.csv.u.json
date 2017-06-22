@@ -1,0 +1,106 @@
+[
+  {
+    "dir": "/home/manuel/Documents/GitRepos/Ursgal_fork/ursgal/resources/platform_independent/arc_independent/metfrag_2_3_1",
+    "file": "example_data.txt",
+    "file_extention": ".txt",
+    "file_root": "example_data",
+    "full": "/home/manuel/Documents/GitRepos/Ursgal_fork/ursgal/resources/platform_independent/arc_independent/metfrag_2_3_1/example_data.txt",
+    "is_compressed": false,
+    "json": "example_data.txt.u.json",
+    "json_exists": false
+  },
+  {
+    "dir": "/home/manuel/Documents/GitRepos/Ursgal_fork/ursgal/resources/platform_independent/arc_independent/metfrag_2_3_1/metfrag_2_3_1",
+    "file": "example_data_metfrag_2_3_1.csv",
+    "file_extention": ".csv",
+    "file_root": "example_data_metfrag_2_3_1",
+    "full": "/home/manuel/Documents/GitRepos/Ursgal_fork/ursgal/resources/platform_independent/arc_independent/metfrag_2_3_1/metfrag_2_3_1/example_data_metfrag_2_3_1.csv",
+    "is_compressed": false,
+    "json": "example_data_metfrag_2_3_1.csv.u.json",
+    "json_exists": true
+  },
+  {
+    "MetFrag_database_type": "Local SDF",
+    "compomics_version": "compomics_utilities_4_11_5",
+    "compress_raw_search_results_if_possible": true,
+    "cpus": 7,
+    "database": "../example_data/NucleosideDB.sdf.gz",
+    "del_from_params_before_json_dump": [
+      "grouped_psms"
+    ],
+    "engines_create_folders": true,
+    "filter_csv_converter_version": "filter_csv_1_0_0",
+    "force": false,
+    "helper_extension": ".u.json",
+    "json_extension": ".u.json",
+    "mzidentml_converter_version": "mzidentml_lib_1_6_10",
+    "mzml2mgf_converter_version": "mzml2mgf_1_0_0",
+    "peptide_mapper_converter_version": "upeptide_mapper_1_0_0",
+    "prefix": null,
+    "raw_ident_csv_suffix": ".csv",
+    "remove_temporary_files": true,
+    "rt_pickle_name": "_ursgal_lookup.pkl",
+    "sanitize_csv_converter_version": "sanitize_csv_1_0_0",
+    "show_unodes_in_development": false,
+    "unify_csv_converter_version": "unify_csv_1_0_0",
+    "ursgal_resource_url": "http://www.uni-muenster.de/Biologie.IBBP.AGFufezan/",
+    "validated_ident_csv_suffix": "validated.csv",
+    "validation_score_field": null
+  },
+  {
+    "history": [
+      {
+        "META_INFO": {
+          "citation": "\n                     MetFrag relaunched: incorporating strategies beyond in silico fragmentation: \n                     C Ruttkies, E L Schymanski, S Wolf, J Hollender, S Neumann\n                     Journal of Cheminformatics 2016 8:3\n                     ",
+          "compress_raw_search_results": false,
+          "create_own_folder": true,
+          "edit_version": 1.0,
+          "engine": {
+            "platform_independent": {
+              "arc_independent": {
+                "additional_exe": [],
+                "exe": "MetFrag2.3.1-CL.jar",
+                "url": "",
+                "zip_md5": ""
+              }
+            }
+          },
+          "engine_type": {
+            "search_engine": false
+          },
+          "in_development": true,
+          "include_in_git": false,
+          "input_extensions": [
+            ".mgf",
+            ".mzML",
+            ".txt"
+          ],
+          "input_multi_file": false,
+          "name": "metfrag",
+          "output_extensions": [
+            ".csv"
+          ],
+          "release_date": "2016",
+          "utranslation_style": "metfrag_style_1",
+          "version": "v2.31"
+        },
+        "engine": "metfrag_2_3_1",
+        "finfo": {
+          "dir": "/home/manuel/Documents/GitRepos/Ursgal_fork/ursgal/resources/platform_independent/arc_independent/metfrag_2_3_1",
+          "file": "example_data.txt",
+          "file_extention": ".txt",
+          "file_root": "example_data",
+          "full": "/home/manuel/Documents/GitRepos/Ursgal_fork/ursgal/resources/platform_independent/arc_independent/metfrag_2_3_1/example_data.txt",
+          "is_compressed": false,
+          "json": "example_data.txt.u.json",
+          "json_exists": false
+        },
+        "history_addon": {},
+        "status": "launching",
+        "ursgal_version": "0.5.0"
+      }
+    ],
+    "run_status": "scheduled",
+    "time_points": {}
+  }
+]
