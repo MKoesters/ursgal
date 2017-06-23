@@ -21,26 +21,178 @@ ursgal_params = {
         'default_value' : 'PubChem',
         'description' : 'bla',
     },
-    #'MetFrag_neutral_precursor_mol_formula' : {
-    #},
-    #'MetFrag_ionized_precursor_mol_formula' : {
-    #},
-    #'MetFrag_score_type' : {
-    #},
-    #'MetFrag_score_weights' : {
-    #},
-    #'MetFrag_output_type' : {
-    #},
-    #'MetFrag_maximum_tree_depth' : {
-    #},
-    #'MetFrag_preprocessing_candidate_filter': {
-    #},
-    #'MetFrag_postprocessing_candidate_filter' : {
-    #},
-    #'MetFrag_ion_mode' : {
-    #},
-    #'MetFrag_database_type' : {
-    #},
+    'MetFrag_neutral_precursor_mol_formula' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'metfrag_style_1' : 'NeutralPrecursorMolecularFormula',
+        },
+        'utag' : [
+            'metabolomics'
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'str',
+        'uvalue_option' : {
+            'multipleLine' : False,
+        },
+        'default_value' : 'C9H11Cl3NO3PS',
+        'description' : 'Chemical Formula of the neutral precursor to identify',
+    },
+    'MetFrag_ionized_precursor_mol_formula' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'metfrag_style_1' : 'IonizedPrecursorMolecularFormula',
+        },
+        'utag' : [
+            'metabolomics'
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'str',
+        'uvalue_option' : {
+            'multipleLine' : False,
+        },
+        'default_value' : '',
+        'description' : 'Chemical Formula of the ionized precursor to identify',
+    },
+    'MetFrag_score_types' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'metfrag_style_1' : 'MetFragScoreTypes',
+        },
+        'utag' : [
+            'metabolomics'
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'list',
+        'uvalue_option' : {
+            'multipleLine' : False,
+        },
+        'default_value' : ['FragmenterScore'],
+        'description' : 'Columns to use as an additional score',
+    },
+    'MetFrag_score_weights' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'metfrag_style_1' : 'MetFragScoreWeights',
+        },
+        'utag' : [
+            'metabolomics'
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'list',
+        'uvalue_option' : {
+            'multipleLine' : False,
+        },
+        'default_value' : ['1'],
+        'description' : 'Weighting of the defined scores',
+    },
+    'MetFrag_maximum_tree_depth' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'metfrag_style_1' : 'MaximumTreeDepth',
+        },
+        'utag' : [
+            'metabolomics',
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'int',
+        'uvalue_option' : {
+            'none_val'  : None,
+            'max'       : 1000000,
+            'min'       : 0,
+            'updownval' : 1,
+            'unit'      : ''
+        },
+        'default_value' : 2,
+        'description' : 'Traverse the structural mol tree until this depth'
+    },
+    'MetFrag_preprocessing_candidate_filter': {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'metfrag_style_1' : 'MetFragPreProcessingCandidateFilter',
+        },
+        'utag' : [
+            'metabolomics'
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'str',
+        'uvalue_option' : {
+            'multipleLine' : False,
+        },
+        'default_value' : 'UnconnectedCompoundFilter',
+        'description' : 'Met Frag preprocessing filter',
+    },
+    'MetFrag_postprocessing_candidate_filter' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'metfrag_style_1' : 'MetFragPostProcessingCandidateFilter',
+        },
+        'utag' : [
+            'metabolomics'
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'str',
+        'uvalue_option' : {
+            'multipleLine' : False,
+        },
+        'default_value' : 'InChIKeyFilter',
+        'description' : 'Met Frag postprocessing filter',
+    },
+    'MetFrag_precursor_ion_mode' : {
+        'edit_version' : 1.00,
+        'available_in_unode' : [
+            'metfrag_2_3_1',
+        ],
+        'triggers_rerun' : True,
+        'ukey_translation' : {
+            'metfrag_style_1' : 'PrecursorIonMode',
+        },
+        'utag' : [
+            'metabolomics'
+        ],
+        'uvalue_translation' : {
+        },
+        'uvalue_type' : 'int',
+        'uvalue_option' : {
+            'multipleLine' : False,
+        },
+        'default_value' : 1,
+        'description' : 'precursor charge',
+    },
     'database' : {
         'edit_version' : 1.00,
         'available_in_unode' : [
@@ -82,7 +234,8 @@ ursgal_params = {
             'xtandem_style_1'             : 'file URL',
             'upeptide_mapper_style_1'     : 'database',
             'compomics_utilities_style_1' : 'database',
-            'msfragger_style_1'           : 'database_name'
+            'msfragger_style_1'           : 'database_name',
+            'metfrag_style_1'             : 'LocalDatabasePath',
 
         },
         'utag' : [
@@ -103,8 +256,7 @@ ursgal_params = {
             'Path to database file containing protein sequences in fasta format\n'\
             '    \'\' : None',
     },
-    #'MetFrag_Precursor_mol_formula' : {
-    #},
+    #  supply or calc?
     #'MetFrag_neutral_precursor_mass' : {
     #},
     #'MetFrag_ionized_precursor_mass' : {
@@ -314,6 +466,7 @@ ursgal_params = {
         'ukey_translation' : {
             'omssa_style_1'   : ('-oc', '-ox'),
             'xtandem_style_1' : 'output, mzid',
+            'metfrag_style_1' : 'MetFragCandidateWriter'
         },
         'utag' : [
             'output',
@@ -328,6 +481,14 @@ ursgal_params = {
                 '.mzid' : 'yes',
                 'default' : 'no',
             },
+            'metfrag_style_1' : {
+                '.csv'                  : 'CSV',
+                '.xls'                  : 'XLS',
+                '.sdf'                  : 'SDF',
+                '.exls'                 : 'ExtendedXLS',
+                '.efxls'                : 'ExtendedFragmentsXLS',
+                'default'               : 'CSV'
+            }
         },
         'uvalue_type' : 'select',
         'uvalue_option' : {
@@ -337,11 +498,7 @@ ursgal_params = {
             'custom_val_max' : 0,
         },
         'default_value' : 'default',
-        'description' : \
-            'Output file type. If set to \'default\', default output file '\
-            'tzpes for each engine are used. Note: not every file type is '\
-            'supported by every engine and usin non-default types might cause '\
-            'problems during conversion to .csv.',
+        'description' : ''
     },
 
     '_extentions' : {
@@ -618,13 +775,15 @@ ursgal_params = {
             'mzidentml_lib_1_6_10',
             'mzidentml_lib_1_6_11',
             'mzidentml_lib_1_7',
-            'msfragger_20170103'
+            'msfragger_20170103',
+            'metfrag_2_3_1',
         ],
         'triggers_rerun' : False,
         'ukey_translation' : {
             'msgfplus_style_1'  : '-Xmx',
             'mzidentml_style_1' : '-Xmx',
             'msfragger_style_1' : '-Xmx',
+            'metfrag_style_1'   : '-Xmx'
         },
         'utag' : [
             'hardware_resources',
@@ -1288,6 +1447,7 @@ ursgal_params = {
             'xtandem_vengeance',
             'xtandem_alanine',
             'msfragger_20170103',
+            'metfrag_2_3_1'
         ],
         'triggers_rerun' : False,
         'ukey_translation' : {
@@ -1298,6 +1458,7 @@ ursgal_params = {
             'ucontroller_style_1' : 'cpus',
             'xtandem_style_1'     : 'spectrum, threads',
             'msfragger_style_1'   : 'num_threads',
+            'metfrag_style_1'     : 'NumberThreads',
         },
         'utag' : [
             'hardware_resources',
