@@ -1271,6 +1271,11 @@ class UNode(object, metaclass=Meta_UNode):
             'cross_link_engine',
             False
         )
+
+        is_search_engine = self.META_INFO['engine_type'].get(
+            'quantitation_engine',
+            False
+        )
         map_mods_node_exceptions = [
             'unify_csv'
         ]

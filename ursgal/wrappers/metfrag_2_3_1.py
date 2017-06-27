@@ -60,7 +60,11 @@ class metfrag_2_3_1(ursgal.UNode):
             peak_file = self._write_peak_list(input_file)
         else:
             peak_file = input_file
-        param_file      = self._write_param_file(self.params, peak_file, output_file)
+        param_file      = self._write_param_file(
+            self.params,
+            peak_file,
+            output_file
+        )
         self.params['command_list'] = [
             'java',
             '-Xmx{0}'.format(self.params['-xmx']),
