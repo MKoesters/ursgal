@@ -84,6 +84,7 @@ class msgfplus2csv_v2016_09_16( ursgal.UNode ):
             input_file_incl_path = path
             self.params['translations']['tmp_uncompressed_mzid'] = path
 
+        print(self.params['command_list'])
         self.params['command_list'] = [
             'java',
             '-Xmx{0}'.format(self.params['translations']['-xmx']),

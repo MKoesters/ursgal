@@ -183,7 +183,7 @@ ursgal_params = {
             'pyQms_0_0_1',
         ],
         'uvalue_option': {
-            'none_val': None,
+            'none_val': 0,
             'multiple_line': False,
             'max': 20000,
             'min': 0,
@@ -210,7 +210,7 @@ ursgal_params = {
             'pyQms_0_0_1',
         ],
         'uvalue_option': {
-             'none_val': None,
+            'none_val': 0,
             'multiple_line': False,
             'max': 20000,
             'min': 0,
@@ -1358,7 +1358,8 @@ ursgal_params = {
             'omssa_style_1'     : '-to',
             'pepnovo_style_1'   : '-fragment_tolerance',
             'xtandem_style_1'   : 'spectrum, fragment monoisotopic mass error',
-            'msfragger_style_1' : 'fragment_mass_tolerance'
+            'msfragger_style_1' : 'fragment_mass_tolerance',
+            'metfrag_style_1'   : 'FragmentPeakMatchRelativeMassDeviation'
         },
         'utag' : [
             'fragment',
@@ -4843,6 +4844,7 @@ ursgal_params = {
             'xtandem_vengeance',
             'xtandem_alanine',
             'msfragger_20170103',
+            'pyQms_0_0_1'
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
@@ -4853,6 +4855,7 @@ ursgal_params = {
             'omssa_style_1'     : ('-tem', '-tom'),
             'xtandem_style_1'   : 'protein, modified residue mass file',
             'msfragger_style_1' : 'label',
+            'pyQms_style_1'     : 'label'
         },
         'utag' : [
             'label',

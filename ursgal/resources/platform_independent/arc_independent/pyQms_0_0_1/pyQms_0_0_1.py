@@ -125,14 +125,12 @@ def generate_result_pickle(
         # we need to parse the file, fragment each peptide and write a similiar csv with the fragments as rows
         # evidence_files = fragment_evidences(evidence_files)
         raise Exception('Not supported yet')
-
     fixed_labels, evidences, molecules = pyqms.adaptors.parse_evidence(
         fixed_labels=fixed_labels,
         evidence_files=evidence_files,
         molecules=molecules,
         evidence_score_field=evidence_score_field
     )
-
     params = {
         'molecules'        : molecules,
         'charges'          : [
@@ -147,7 +145,6 @@ def generate_result_pickle(
         'verbose'          : False,
         'evidences'        : evidences
     }
-
     print('[ -ENGINE- ] Set up Isotopolugue Library')
     lib = pyqms.IsotopologueLibrary(**params)
 

@@ -121,9 +121,6 @@ class pyQms_0_0_1(ursgal.UNode):
                     'evidence_mod_name'   : name
                 }
             )
-        pprint(fixed_labels)
-        pprint(self.params)
-
         out = main(
             mzml_file           = mzml_files,
             output_file         = output_file,
