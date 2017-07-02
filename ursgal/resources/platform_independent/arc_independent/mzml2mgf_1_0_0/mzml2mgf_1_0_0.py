@@ -25,6 +25,8 @@ def _determine_mzml_name_base( file_name, prefix ):
         mzml_name_base = file_name[:-8]
     elif file_name.upper().endswith('.MZML'):
         mzml_name_base = file_name[:-5]
+    elif file_name.upper().endswith('.MZML.IGZ'):
+        mzml_name_base = file_name[:9]
     else:
         raise Exception(
             "Can not determine mzml base name from {0}".format(
@@ -57,7 +59,6 @@ def main(
     oof = open( mgf , 'w' )
     run = pymzml.run.Reader(
         mzml,
-        extraAccessions=[ ('MS:1000016', ['value', 'unitName'] )],
         obo_version = '1.1.0'
     )
     tmp = {
@@ -87,10 +88,10 @@ def main(
 
         # if n >= 1000:
         #     break
-        if spec['ms level'] != 2:
+        if spec.ms level != 2:
             continue
-        scan_time, unit = spec['scan time']
-        spectrum_id = spec['id']
+        scan_time = spec.scan_time
+        spectrum_id = spec.ID
         if scan_inclusion_list is not None:
             if int(spectrum_id) not in scan_inclusion_list:
                 continue
@@ -103,9 +104,9 @@ def main(
             if mgf_entries % scan_skip_modulo_step != 0:
                 continue
 
-        tmp['rt_2_scan'][ scan_time ] = '{id}'.format(**spec)
-        tmp['scan_2_rt'][ '{id}'.format(**spec) ] = scan_time
-        tmp['unit'] = unit
+        tmp['rt_2_scan'][ scan_time ] = '{id}'.format(id=spec.ID)
+        tmp['scan_2_rt'][ '{id}'.format(id=spec.ID) ] = scan_time
+        tmp['unit'] = 'minute'
 
         print('BEGIN IONS', file=oof)
         print(
@@ -118,18 +119,13 @@ def main(
         )
         print('SCANS={id}'.format(**spec), file=oof)
 
-        scan_time, unit = spec['scan time']
-        if unit == 'second':
-            scan_time = float(scan_time)
-        else:
-            scan_time = float(scan_time) * 60
         print(
             'RTINSECONDS={0}'.format(
-                scan_time
+                scan_time * 60
             ),
             file = oof
         )
-        precursor_mz = spec['precursors'][0]['mz']
+        precursor_mz = spec.precursors[0]['mz']
 
         precursor_mz += precursor_mz * mz_correction_factor
         print(
@@ -138,7 +134,7 @@ def main(
             ),
             file = oof
         )
-        if spec['precursors'][0]['charge'] is not None:
+        if spec.precursors[0]['charge'] is not None:
             print(
                 'CHARGE={0}'.format(
                     spec['precursors'][0]['charge']
@@ -187,5 +183,3 @@ if __name__ == '__main__':
     else:
         args = parser.parse_args()
         tmp = main( **args.__dict__ )
-        # print(tmp.keys())
-        # print(sorted( tmp['scan_2_rt'].keys() ))

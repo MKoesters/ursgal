@@ -49,7 +49,6 @@ def main( mzml = None, i_decimals = 5, mz_decimals = 5 ):
     mzml_name_base = _determine_mzml_name_base( mzml )
     run = pymzml.run.Reader(
         mzml,
-        extraAccessions=[ ('MS:1000016', ['value', 'unitName'] )],
         obo_version = '1.1.0'
     )
     dta_entries = 0
@@ -62,10 +61,10 @@ def main( mzml = None, i_decimals = 5, mz_decimals = 5 ):
                 ),
                 end = '\r'
             )
-        if spec['ms level'] != 2:
+        if spec.ms_level != 2:
             continue
-        scan_time, unit = spec['scan time']
-        spectrum_id = spec['id']
+        scan_time, unit = spec.scan_time
+        spectrum_id = spec.ID
         file_name = '{0}.{1}.{1}.dta'.format(
             mzml_name_base,
             spectrum_id,
@@ -73,11 +72,11 @@ def main( mzml = None, i_decimals = 5, mz_decimals = 5 ):
         with open(file_name, 'w') as oof:
             print(
                 '{mh} {charge}'.format(
-                    mh = convert_mz_2_mass(
-                        spec['precursors'][0]['mz'],
-                        spec['precursors'][0]['charge']
+                    mh=convert_mz_2_mass(
+                        spec.precursors[0]['mz'],
+                        spec.precursors[0]['charge']
                     ) + PROTON,
-                    charge = spec['precursors'][0]['charge']
+                    charge=spec.precursors[0]['charge']
                 ),
                 file=oof
             )
