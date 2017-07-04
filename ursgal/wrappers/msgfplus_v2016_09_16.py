@@ -60,7 +60,6 @@ class msgfplus_v2016_09_16( ursgal.UNode ):
         Returns:
                 dict: self.params
         '''
-
         translations = self.params['translations']['_grouped_by_translated_key']
         # import pprint
         # pprint.pprint(translations)
