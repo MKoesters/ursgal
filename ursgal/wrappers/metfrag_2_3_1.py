@@ -12,8 +12,8 @@ class metfrag_2_3_1(ursgal.UNode):
     META_INFO = {
         'edit_version'                : 1.00,
         'name'                        : 'metfrag',
-        'version'                     : 'v2.31',
-        'release_date'                : '2016',
+        'version'                     : '2_3_1',
+        'release_date'                : '2016-01-01',
         'engine_type' : {
             'search_engine' : False,
         },

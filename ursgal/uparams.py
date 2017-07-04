@@ -1,424 +1,424 @@
 ursgal_params = {
-    'write_pyQms_rt_info': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-        },
-        'default_value': True,
-        'description': '''Wether or not to write a rt info file''',
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1': 'write_rt_info'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "bool",
-    },
-    'label_percentile_format_string': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': '{0}',
-            'multiple_line': False,
-            'unit': 'psms',
+    # 'write_pyQms_rt_info': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #     },
+    #     'default_value': True,
+    #     'description': '''Wether or not to write a rt info file''',
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1': 'write_rt_info'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "bool",
+    # },
+    # 'label_percentile_format_string': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': '{0}',
+    #         'multiple_line': False,
+    #         'unit': 'psms',
 
-        },
-        'default_value': '{0:.3f}',
-        'description': """Defines the standard format string when\
-            formatting labeling percentile float""",
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1' : 'PECENTILE_FORMAT_STRING'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "str",
-    },
-    'min_element_abundance': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 10000,
-            'min': 0,
-            'updownval': 0.001,
-            'unit': 'abundance',
-            'f-point': 1e-02
+    #     },
+    #     'default_value': '{0:.3f}',
+    #     'description': """Defines the standard format string when\
+    #         formatting labeling percentile float""",
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1' : 'PECENTILE_FORMAT_STRING'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "str",
+    # },
+    # 'min_element_abundance': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 10000,
+    #         'min': 0,
+    #         'updownval': 0.001,
+    #         'unit': 'abundance',
+    #         'f-point': 1e-02
 
-        },
-        'default_value': 1e-3,
-        'description': """ DESC """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1' : 'ELEMENT_MIN_ABUNDANCE'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "float",
-    },
-    'min_rel_peak_intensity_for_matching': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 10000,
-            'min': 0,
-            'updownval': 0.01,
-            'unit': 'a.u.',
-            'f-point': 1e-02
+    #     },
+    #     'default_value': 1e-3,
+    #     'description': """ DESC """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1' : 'ELEMENT_MIN_ABUNDANCE'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    # 'min_rel_peak_intensity_for_matching': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 10000,
+    #         'min': 0,
+    #         'updownval': 0.01,
+    #         'unit': 'a.u.',
+    #         'f-point': 1e-02
 
-        },
-        'default_value': 0.01,
-        'description': """ DESC """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1' : 'MIN_REL_PEAK_INTENSITY_FOR_MATCHING'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "float",
-    },
-    'required_percentile_peak_overlap': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 1,
-            'min': 0,
-            'updownval': 0.1,
-            'unit': 'a.u.',
-            'f-point': 1e-02
+    #     },
+    #     'default_value': 0.01,
+    #     'description': """ DESC """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1' : 'MIN_REL_PEAK_INTENSITY_FOR_MATCHING'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    # 'required_percentile_peak_overlap': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 1,
+    #         'min': 0,
+    #         'updownval': 0.1,
+    #         'unit': 'a.u.',
+    #         'f-point': 1e-02
 
-        },
-        'default_value': 0.5,
-        'description': """ Desc """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1' : 'REQUIRED_PERCENTILE_PEAK_OVERLAP'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "float",
-    },
-    'minimum_number_of_matched_isotopologues': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 1000,
-            'min': 0,
-            'updownval': 1,
-            'unit': '',
+    #     },
+    #     'default_value': 0.5,
+    #     'description': """ Desc """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1' : 'REQUIRED_PERCENTILE_PEAK_OVERLAP'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    # 'minimum_number_of_matched_isotopologues': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 1000,
+    #         'min': 0,
+    #         'updownval': 1,
+    #         'unit': '',
 
-        },
-        'default_value': 2,
-        'description': """ Desc """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1': 'MININUM_NUMBER_OF_MATCHES_ISOTOPOLOGUES'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "int",
-    },
-    'intensity_transformation_factor': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 1e20,
-            'min': 0,
-            'updownval': 1e4,
-            'unit': 'a.u.',
-            'f-point': 0.1
+    #     },
+    #     'default_value': 2,
+    #     'description': """ Desc """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1': 'MININUM_NUMBER_OF_MATCHES_ISOTOPOLOGUES'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "int",
+    # },
+    # 'intensity_transformation_factor': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 1e20,
+    #         'min': 0,
+    #         'updownval': 1e4,
+    #         'unit': 'a.u.',
+    #         'f-point': 0.1
 
-        },
-        'default_value': 1e5,
-        'description': """ Desc """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1': 'INTENSITY_TRANSFORMATION_FACTOR'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "float",
-    },
-    'upper_mz_limit': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 20000,
-            'min': 0,
-            'updownval': 100,
-            'unit': 'a.u.',
-            'f-point': 1e-01
+    #     },
+    #     'default_value': 1e5,
+    #     'description': """ Desc """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1': 'INTENSITY_TRANSFORMATION_FACTOR'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    # 'upper_mz_limit': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 20000,
+    #         'min': 0,
+    #         'updownval': 100,
+    #         'unit': 'a.u.',
+    #         'f-point': 1e-01
 
-        },
-        'default_value': 2000,
-        'description': """ Desc """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-            'pyQms_style_1': 'UPPER_MZ_LIMIT'
-        },
-        'uvalue_type': "float",
-    },
-    'lower_mz_limit': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-             'none_val': None,
-            'multiple_line': False,
-            'max': 20000,
-            'min': 0,
-            'updownval': 100,
-            'unit': 'a.u.',
-            'f-point': 1e-01
-        },
-        'default_value': 150,
-        'description': """ Desc """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-            'pyQms_style_1': 'LOWER_MZ_LIMIT'
-        },
-        'uvalue_type': "float",
-    },
-    'mz_transformation_factor': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 1e10,
-            'min': 0,
-            'updownval': 100,
-            'unit': 'a.u.',
-            'f-point': 1e-01
-        },
-        'default_value': 1000,
-        'description': """ Desc """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-            'pyQms_style_1': 'MZ_TRANSFORMATION_FACTOR'
-        },
-        'uvalue_type': "float",
-    },
-    'rel_mz_range': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 10e10,
-            'min': 0,
-            'updownval': 5e4,
-            'unit': 'a.u.',
-            'f-point': 1e-7
+    #     },
+    #     'default_value': 2000,
+    #     'description': """ Desc """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #         'pyQms_style_1': 'UPPER_MZ_LIMIT'
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    # 'lower_mz_limit': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #          'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 20000,
+    #         'min': 0,
+    #         'updownval': 100,
+    #         'unit': 'a.u.',
+    #         'f-point': 1e-01
+    #     },
+    #     'default_value': 150,
+    #     'description': """ Desc """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #         'pyQms_style_1': 'LOWER_MZ_LIMIT'
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    # 'mz_transformation_factor': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 1e10,
+    #         'min': 0,
+    #         'updownval': 100,
+    #         'unit': 'a.u.',
+    #         'f-point': 1e-01
+    #     },
+    #     'default_value': 1000,
+    #     'description': """ Desc """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #         'pyQms_style_1': 'MZ_TRANSFORMATION_FACTOR'
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    # 'rel_mz_range': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 10e10,
+    #         'min': 0,
+    #         'updownval': 5e4,
+    #         'unit': 'a.u.',
+    #         'f-point': 1e-7
 
-        },
-        'default_value': 5e-6,
-        'description': """ Desc """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1': 'REL_MZ_RANGE'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "float",
-    },
-    'rel_i_range': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 1,
-            'min': 0,
-            'updownval': 0.01,
-            'unit': 'a.u.',
-            'f-point': 1e-02
+    #     },
+    #     'default_value': 5e-6,
+    #     'description': """ Desc """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1': 'REL_MZ_RANGE'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    # 'rel_i_range': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 1,
+    #         'min': 0,
+    #         'updownval': 0.01,
+    #         'unit': 'a.u.',
+    #         'f-point': 1e-02
 
-        },
-        'default_value': 0.2,
-        'description': """ Desc """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1': 'REL_I_RANGE'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "float",
-    },
-    'internal_precision': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 1e10,
-            'min': 0,
-            'updownval': 100,
-            'unit': 'a.u.',
-            'f-point': 1e-01
+    #     },
+    #     'default_value': 0.2,
+    #     'description': """ Desc """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1': 'REL_I_RANGE'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    # 'internal_precision': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 1e10,
+    #         'min': 0,
+    #         'updownval': 100,
+    #         'unit': 'a.u.',
+    #         'f-point': 1e-01
 
-        },
-        'default_value': 1000,
-        'description': """ Desc """,
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1': 'INTERNAL_PRECISION'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "float",
-    },
-    'max_molecules_per_match_bin': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 10000,
-            'min': 0,
-            'updownval': 1,
-            'unit': 'psms',
+    #     },
+    #     'default_value': 1000,
+    #     'description': """ Desc """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1': 'INTERNAL_PRECISION'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    # 'max_molecules_per_match_bin': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 10000,
+    #         'min': 0,
+    #         'updownval': 1,
+    #         'unit': 'psms',
 
-        },
-        'default_value': 20,
-        'description': ''' Minimum number of peptide spectrum matches required \
-            for considering a peptide for quantification ''',
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1': 'MAX_MOLECULES_PER_MATCH_BIN'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "int",
-    },
-    'silac_aas_locked_in_experiment': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 10000,
-            'min': 0,
-            'updownval': 1,
-            'unit': 'psms',
+    #     },
+    #     'default_value': 20,
+    #     'description': ''' Minimum number of peptide spectrum matches required \
+    #         for considering a peptide for quantification ''',
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1': 'MAX_MOLECULES_PER_MATCH_BIN'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "int",
+    # },
+    # 'silac_aas_locked_in_experiment': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 10000,
+    #         'min': 0,
+    #         'updownval': 1,
+    #         'unit': 'psms',
 
-        },
-        'default_value': None,
-        'description': ''' Minimum number of peptide spectrum matches required \
-            for considering a peptide for quantification ''',
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1': 'SILAC_AAS_LOCKED_IN_EXPERIMENT'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "list",
-    },
-    'build_pyQms_result_index': {
-        'available_in_unode': [
-            'pyQms_0_0_1',
-        ],
-        'uvalue_option': {
-            'none_val': None,
-            'multiple_line': False,
-            'max': 10000,
-            'min': 0,
-            'updownval': 1,
-            'unit': 'psms',
+    #     },
+    #     'default_value': None,
+    #     'description': ''' Minimum number of peptide spectrum matches required \
+    #         for considering a peptide for quantification ''',
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1': 'SILAC_AAS_LOCKED_IN_EXPERIMENT'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "list",
+    # },
+    # 'build_pyQms_result_index': {
+    #     'available_in_unode': [
+    #         'pyQms_0_0_1',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': None,
+    #         'multiple_line': False,
+    #         'max': 10000,
+    #         'min': 0,
+    #         'updownval': 1,
+    #         'unit': 'psms',
 
-        },
-        'default_value': True,
-        'description': ''' Minimum number of peptide spectrum matches required \
-            for considering a peptide for quantification ''',
-        'triggers_rerun': True,
-        'ukey_translation': {
-            'pyQms_style_1': 'BUILD_RESULT_INDEX'
-        },
-        'utag': [
-            'quantitation',
-        ],
-        'uvalue_translation': {
-        },
-        'uvalue_type': "bool",
-    },
+    #     },
+    #     'default_value': True,
+    #     'description': ''' Minimum number of peptide spectrum matches required \
+    #         for considering a peptide for quantification ''',
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'pyQms_style_1': 'BUILD_RESULT_INDEX'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "bool",
+    # },
     # 'pyQms_colors': {
     #     'available_in_unode': [
     #         'pyQms_0_0_1',
@@ -459,8 +459,8 @@ ursgal_params = {
     # },
     'min_psms_for_quant_event': {
         'available_in_unode': [
-            'protein_amounts_0_0_5',
-            'protein_amounts_0_0_6'
+            # 'protein_amounts_0_0_5',
+            # 'protein_amounts_0_0_6'
         ],
         'uvalue_option': {
             'none_val': None,
@@ -476,7 +476,7 @@ ursgal_params = {
             for considering a peptide for quantification ''',
         'triggers_rerun': True,
         'ukey_translation': {
-            'protein_amounts_style_1': 'min_psms'
+            # 'protein_amounts_style_1': 'min_psms'
         },
         'utag': [
             'quantitation',
@@ -579,7 +579,7 @@ ursgal_params = {
     },
     'experiment_mapping': {
         'available_in_unode': [
-            'protein_amounts_0_0_5',
+            # 'protein_amounts_0_0_5',
         ],
         'uvalue_option': {
             'none_val': {},
@@ -598,7 +598,7 @@ ursgal_params = {
         'description':  ''' Experiment mapping, so protein_amounts knows which file and lp to score against each other ''',
         'triggers_rerun': True,
         'ukey_translation': {
-            'protein_amounts_style_1': 'experiment_mapping'
+            # 'protein_amounts_style_1': 'experiment_mapping'
         },
         'utag': [
             'quantitation',
@@ -609,7 +609,7 @@ ursgal_params = {
     },
     'group_proteins_with_same_peptide': {
         'available_in_unode': [
-            'protein_amounts_0_0_5',
+            # 'protein_amounts_0_0_5',
         ],
         'uvalue_option': {
             'none_val': None,
@@ -624,14 +624,14 @@ ursgal_params = {
             'quantitation',
         ],
         'uvalue_translation': {
-            'protein_amounts_style_1' : ''
+            # 'protein_amounts_style_1' : ''
         },
         'uvalue_type': "bool",
     },
     'protein_inference_file': {
         'available_in_unode': [
-            'protein_amounts_0_0_5',
-            'protein_amounts_0_0_6'
+            # 'protein_amounts_0_0_5',
+            # 'protein_amounts_0_0_6'
         ],
         'default_value': None,
         'uvalue_option': {
@@ -641,7 +641,7 @@ ursgal_params = {
         'description':  ''' Protein inference file with PEP and peptides by percolator ''',
         'triggers_rerun': True,
         'ukey_translation': {
-            'protein_amounts_style_1' : 'inference_file'
+            # 'protein_amounts_style_1' : 'inference_file'
         },
         'utag': [
             'quantitation',
@@ -652,7 +652,7 @@ ursgal_params = {
     },
     'm_score_cutoff': {
         'available_in_unode': [
-            'protein_amounts_0_0_5',
+            # 'protein_amounts_0_0_5',
         ],
         'uvalue_option': {
             'none_val': None,
@@ -667,7 +667,7 @@ ursgal_params = {
         'description':  ''' minimum required pyQms m_score for a quant event to be evaluated ''',
         'triggers_rerun': True,
         'ukey_translation': {
-            'protein_amounts_style_1': 'm_cutoff'
+            # 'protein_amounts_style_1': 'm_cutoff'
         },
         'utag': [
             'quantitation',
@@ -735,7 +735,7 @@ ursgal_params = {
     'pyQms_pickle_name': {
         'available_in_unode': [
             'pyQms_0_0_1',
-            'protein_amounts_0_0_6'
+            # 'protein_amounts_0_0_6'
         ],
         'uvalue_option': {
             'none_val': None,
@@ -876,7 +876,7 @@ ursgal_params = {
     },
     'rt_border_tolerance' : {
         'available_in_unode' : [
-            'protein_amounts_0_0_5',
+            # 'protein_amounts_0_0_5',
             'pyQms_0_0_1',
         ],
         'default_value' : 1,
@@ -884,7 +884,7 @@ ursgal_params = {
         'triggers_rerun' : True,
         'ukey_translation' : {
             'pyQms_style_1' : 'rt_border_tolerance',
-            'protein_amounts_style_1' : 'rt_border_tolerance'
+            # 'protein_amounts_style_1' : 'rt_border_tolerance'
         },
         'utag' : [
             'quantitation',
@@ -1144,6 +1144,10 @@ ursgal_params = {
         'uvalue_type' : 'list',
         'uvalue_option' : {
             'multipleLine' : False,
+            'none_val': [None],
+            'custom_val_max': 200,
+            'type_dict': {},
+            'title_list': []
         },
         'default_value' : ['FragmenterScore'],
         'description' : 'Columns to use as an additional score',
@@ -1165,6 +1169,30 @@ ursgal_params = {
         'uvalue_type' : 'list',
         'uvalue_option' : {
             'multipleLine' : False,
+            'none_val': [None],
+            'custom_val_max': 100,
+            'title_list': ['Weight'],
+            'type_dict': {
+                'Weight': 'float'
+            },
+            'max':{
+                'Weight':1
+            },
+            'min':{
+                'Weight':0
+            },
+            'unit': {
+                'Weight': ''
+            },
+            'f-point': {
+                'Weight': 0.01
+            },
+            'updownval': {
+                'Weight': 0.1
+            },
+            'custom_type': {
+                'Weight': 'float'
+            }
         },
         'default_value' : ['1'],
         'description' : 'Weighting of the defined scores',
@@ -2518,7 +2546,7 @@ ursgal_params = {
             'xtandem_vengeance',
             'xtandem_alanine',
             'msfragger_20170103',
-            'metfrag_2_3_1'
+            'metfrag_2_3_1',
         ],
         'triggers_rerun' : False,
         'ukey_translation' : {
