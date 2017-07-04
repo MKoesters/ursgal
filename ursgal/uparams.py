@@ -1,4 +1,162 @@
 ursgal_params = {
+    'allowed_elements' : {
+        'available_in_unode': [
+            'sirius_3_5',
+        ],
+        'uvalue_option': {
+            'none_val': 0,
+            'multiple_line': False,
+        },
+        'default_value': 'CHNOP[5]S',
+        'description': """ Elements allowed in formula """,
+        'triggers_rerun': True,
+        'ukey_translation': {
+            'sirius_style_1': '-e'
+        },
+        'utag': [
+            'metabolomics',
+        ],
+        'uvalue_translation': {
+        },
+        'uvalue_type': "str",
+    },
+    'ionization': {
+        'available_in_unode': [
+            'sirius_3_5',
+        ],
+        'uvalue_option': {
+            'none_val': 0,
+            'multiple_line': False,
+        },
+        'default_value': '[M+H]+',
+        'description': """ Desc """,
+        'triggers_rerun': True,
+        'ukey_translation': {
+            'sirius_style_1': '-i'
+        },
+        'utag': [
+            'metabolomics',
+        ],
+        'uvalue_translation': {
+        },
+        'uvalue_type': "str",
+    },
+    'isotope_handling': {
+        'available_in_unode': [
+            'sirius_3_5',
+        ],
+        'uvalue_option': {
+            'none_val': 0,
+            'multiple_line': False,
+            'max': 20000,
+            'min': 0,
+            'updownval': 100,
+            'unit': 'a.u.',
+            'f-point': 1e-01
+
+        },
+        'default_value': 'both',
+        'description': """ Desc """,
+        'triggers_rerun': True,
+        'ukey_translation': {
+            'sirius_style_1': '-s'
+        },
+        'utag': [
+            'metbolomics',
+        ],
+        'uvalue_translation': {
+        },
+        'uvalue_type': "str",
+    },
+    'auto_charge':{
+        'available_in_unode': [
+            'sirius_3_5',
+        ],
+        'uvalue_option': {
+            'none_val': None,
+            'multiple_line': False,
+        },
+        'default_value': True,
+        'description': '''Wether or not to write a rt info file''',
+        'triggers_rerun': True,
+        'ukey_translation': {
+            'sirius_style_1': '-Z'
+        },
+        'utag': [
+            'quantitation',
+        ],
+        'uvalue_translation': {
+        },
+        'uvalue_type': "bool",
+    },
+    'recalibrate_sirius':{
+        'available_in_unode': [
+            'sirius_3_5',
+        ],
+        'uvalue_option': {
+            'none_val': None,
+            'multiple_line': False,
+        },
+        'default_value': True,
+        'description': '''Wether or not to write a rt info file''',
+        'triggers_rerun': True,
+        'ukey_translation': {
+            'sirius_style_1': '--no-recalibration'
+        },
+        'utag': [
+            'quantitation',
+        ],
+        'uvalue_translation': {
+        },
+        'uvalue_type': "bool",
+    },
+    # 'noise_level': {
+    #     'available_in_unode': [
+    #         'sirius_3_5',
+    #     ],
+    #     'uvalue_option': {
+    #         'none_val': 0,
+    #         'multiple_line': False,
+    #     },
+    #     'default_value': 2000,
+    #     'description': """ Desc """,
+    #     'triggers_rerun': True,
+    #     'ukey_translation': {
+    #         'sirius_style_1': '--noise'
+    #     },
+    #     'utag': [
+    #         'quantitation',
+    #     ],
+    #     'uvalue_translation': {
+    #     },
+    #     'uvalue_type': "float",
+    # },
+    'sirius_candidate_number': {
+        'edit_version': 1.00,
+        'available_in_unode': [
+            'sirius_3_5',
+        ],
+        'uvalue_option': {
+            'none_val': 0,
+            'multiple_line': False,
+            'max': 20000,
+            'min': 0,
+            'updownval': 1,
+            'unit': '',
+        },
+        'default_value': 10,
+        'description': """ Desc """,
+        'triggers_rerun': True,
+        'ukey_translation': {
+            'sirius_style_1': '-c'
+        },
+        'utag': [
+            'metabolomics',
+        ],
+        'uvalue_translation': {
+        },
+        'uvalue_type': "int",
+    },
     'write_pyQms_rt_info': {
         'available_in_unode': [
             'pyQms_0_0_1',
@@ -1087,14 +1245,16 @@ ursgal_params = {
         'default_value' : 'PubChem',
         'description' : 'bla',
     },
-    'MetFrag_neutral_precursor_mol_formula' : {
+    'neutral_precursor_mol_formula' : {
         'edit_version' : 1.00,
         'available_in_unode' : [
             'metfrag_2_3_1',
+            'sirius_3_5'
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
             'metfrag_style_1' : 'NeutralPrecursorMolecularFormula',
+            'sirius_style_1'  : '-f'
         },
         'utag' : [
             'metabolomics'
@@ -1105,7 +1265,7 @@ ursgal_params = {
         'uvalue_option' : {
             'multipleLine' : False,
         },
-        'default_value' : 'C9H11Cl3NO3PS',
+        'default_value' : '',
         'description' : 'Chemical Formula of the neutral precursor to identify',
     },
     'MetFrag_ionized_precursor_mol_formula' : {
@@ -1323,8 +1483,33 @@ ursgal_params = {
             '    \'\' : None',
     },
     #  supply or calc?
-    #'MetFrag_neutral_precursor_mass' : {
-    #},
+    'neutral_precursor_mass' : {
+        'available_in_unode': [
+            'sirius_3_5',
+        ],
+        'uvalue_option': {
+            'none_val': None,
+            'multiple_line': False,
+            'max': 1e10,
+            'min': 0,
+            'updownval': 1,
+            'unit': 'a.u.',
+            'f-point': 1e-05
+
+        },
+        'default_value': 0,
+        'description': """ Desc """,
+        'triggers_rerun': True,
+        'ukey_translation': {
+            'sirius_style_1': '-z'
+        },
+        'utag': [
+            'quantitation',
+        ],
+        'uvalue_translation': {
+        },
+        'uvalue_type': "float",
+    },
     #'MetFrag_ionized_precursor_mass' : {
     #},
     'frag_mass_tolerance' : {
@@ -1484,6 +1669,7 @@ ursgal_params = {
             'xtandem_vengeance',
             'xtandem_alanine',
             'metfrag_2_3_1',
+            'sirius_3_5'
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
@@ -1501,6 +1687,7 @@ ursgal_params = {
             'qvality_style_1'               : '-o',
             'venndiagram_style_1'           : 'output_file',
             'xtandem_style_1'               : 'output, path',
+            'sirius_style_1'                : '-o'
         },
         'utag' : [
             'output',
@@ -4189,6 +4376,7 @@ ursgal_params = {
             'msgfplus_v2017_01_27',
             'msgfplus_v9979',
             'novor_1_1beta',
+            'sirius_3_5'
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
@@ -4196,6 +4384,7 @@ ursgal_params = {
             'moda_style_1'     : 'Instrument',
             'msgfplus_style_1' : '-inst',
             'novor_style_1'    : 'massAnalyzer',
+            'sirius_style_1'   : '-p'
         },
         'utag' : [
             'instrument',
@@ -4225,6 +4414,12 @@ ursgal_params = {
                 'q_exactive'   : 'FT',
                 'tof'          : 'TOF',
             },
+            'sirius_style_1': {
+                'high_res_ltq' : 'test',
+                'low_res_ltq'  : 'test',
+                'q_exactive '  : 'orbitrap',
+                'tof'          : 'qtof',
+            }
         },
         'uvalue_type' : 'select',
         'uvalue_option' : {
@@ -7293,6 +7488,7 @@ ursgal_params = {
             'xtandem_vengeance',
             'xtandem_alanine',
             'msfragger_20170103',
+            'sirius_3_5'
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
@@ -7305,8 +7501,9 @@ ursgal_params = {
             'omssa_style_1'     : '-te',
             'pepnovo_style_1'   : '-pm_tolerance',
             'unify_csv_style_1' : 'precursor_mass_tolerance_minus',
-            'xtandem_style_1' : 'spectrum, parent monoisotopic mass error minus',
-            'msfragger_style_1' : 'precursor_mass_tolerance'
+            'xtandem_style_1'   : 'spectrum, parent monoisotopic mass error minus',
+            'msfragger_style_1' : 'precursor_mass_tolerance',
+            'sirius_style_1'    : '--ppm-max',
         },
         'utag' : [
             'precursor',
