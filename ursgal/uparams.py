@@ -196,12 +196,12 @@ ursgal_params = {
         'description': """ Desc """,
         'triggers_rerun': True,
         'ukey_translation': {
+            'pyQms_style_1': 'UPPER_MZ_LIMIT'
         },
         'utag': [
             'quantitation',
         ],
         'uvalue_translation': {
-            'pyQms_style_1': 'UPPER_MZ_LIMIT'
         },
         'uvalue_type': "float",
     },
@@ -248,12 +248,12 @@ ursgal_params = {
         'description': """ Desc """,
         'triggers_rerun': True,
         'ukey_translation': {
+            'pyQms_style_1': 'MZ_TRANSFORMATION_FACTOR'
         },
         'utag': [
             'quantitation',
         ],
         'uvalue_translation': {
-            'pyQms_style_1': 'MZ_TRANSFORMATION_FACTOR'
         },
         'uvalue_type': "float",
     },
@@ -653,6 +653,7 @@ ursgal_params = {
     'm_score_cutoff': {
         'available_in_unode': [
             'protein_amounts_0_0_5',
+            'pyQms_0_0_1'
         ],
         'uvalue_option': {
             'none_val': None,
@@ -667,7 +668,8 @@ ursgal_params = {
         'description':  ''' minimum required pyQms m_score for a quant event to be evaluated ''',
         'triggers_rerun': True,
         'ukey_translation': {
-            'protein_amounts_style_1': 'm_cutoff'
+            'protein_amounts_style_1': 'm_cutoff',
+            'pyQms_style_1' : 'm_score_cutoff'
         },
         'utag': [
             'quantitation',
@@ -743,7 +745,7 @@ ursgal_params = {
         },
         'default_value': "_quant_pickle.pkl",
         'description':  ''' Name of the output quant results file ''',
-        'triggers_rerun': False,
+        'triggers_rerun': True,
         'ukey_translation': {
             'pyQms_style_1': 'pickle_name'
         },
@@ -4878,10 +4880,12 @@ ursgal_params = {
         'edit_version' : 1.00,
         'available_in_unode' : [
             'mzml2mgf_1_0_0',
+            'pyQms_0_0_1'
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
             'mzml2mgf_style_1' : 'machine_offset_in_ppm',
+            'pyQms_style_1': 'MACHINE_OFFSET_IN_PPM'
         },
         'utag' : [
             'converter',
