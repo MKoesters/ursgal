@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.4
 import ursgal
 import os
+import rdkit
 
 
 class midas_1_1_0(ursgal.UNode):
@@ -42,10 +43,47 @@ class midas_1_1_0(ursgal.UNode):
 
     def preflight(self):
         """Doc."""
-        pass
+        input_file = os.path.join(
+            self.params['input_dir_path'],
+            self.params['input_file_path']
+        )
+        config_file = os.path.join(
+            os.path.dirname(rdkit.__file__)
+        )
+        output_file = os.path.join(
+            self.params['output_dir_path'],
+            self.params['output_file_path']
+        )
+        annotation_file = os.path.join(
+            self.params['output_dir_path'],
+            os.path.basename(input_file).strip('.csv') + 'annotation.txt'
+        )
+        config_file = self._create_conf_file(
+            config_file,
+            self.params['translations']
+        )
+        self.params['command_list'] += [
+            'python3',
+            self.exe,
+            '-f',
+            input_file,
+            '-c',
+            config_file,
+            '-o',
+            output_file,
+            '-a',
+            annotation_file
+        ]
 
     def postflight(self):
         """DOC."""
-        # convert output from xls to csv
-        # unify output format
         pass
+
+    def _create_conf_file(self, out_path, translated_params):
+        """Write config input file."""
+        with open(out_path, 'wt') as fout:
+            for para, key_name in translated_params:
+                if para.endswith('_key'):
+                    val = translated_params[para.strip('_key')]
+                    fout.write('{0}={1]\n'.format(key_name, val))
+        return out_path
