@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.4
 import ursgal
+from ursgal.chemical_composition import ChemicalComposition
 import os
 import pymzml
 from pprint import pprint
@@ -50,17 +51,27 @@ class sirius_3_5(ursgal.UNode):
         pprint(self.params['translations'])
         print()
         pprint(self.params)
+
         ws_dir = os.path.join(
             self.params['output_dir_path'],
             'sirius_workspace'
         )
+
+        comp = ChemicalComposition('+{neutral_precursor_mol_formula}'.format(
+            **self.params['translations']
+        ))
+        comp_mass = comp._mass()
+        print(self.params['translations']['neutral_precursor_mol_formula'])
+        print(comp_mass)
+        print(comp)
+        # exit(1)
         self.params['command_list'] = [
             self.exe,
             '-q',
-            '{allowed_elements_key}'.format(**self.params['translations']),
-            '{allowed_elements}'.format(**self.params['translations']),
-            '{neutral_precursor_mol_formula_key}'.format(**self.params['translations']),
-            '{neutral_precursor_mol_formula}'.format(**self.params['translations']),
+            # '{allowed_elements_key}'.format(**self.params['translations']),
+            # '{allowed_elements}'.format(**self.params['translations']),
+            # '{neutral_precursor_mol_formula_key}'.format(**self.params['translations']),
+            # '{neutral_precursor_mol_formula}'.format(**self.params['translations']),
             '{ionization_key}'.format(**self.params['translations']),
             '{ionization}'.format(**self.params['translations']),
             '{isotope_handling_key}'.format(**self.params['translations']),
@@ -73,12 +84,11 @@ class sirius_3_5(ursgal.UNode):
             '{output_dir_path}'.format(output_dir_path=ws_dir),
             '{precursor_mass_tolerance_minus_key}'.format(**self.params['translations']),
             '{precursor_mass_tolerance_minus}'.format(**self.params['translations']),
-            '{neutral_precursor_mass_key}'.format(**self.params['translations']),
-            '{neutral_precursor_mass}'.format(**self.params['translations']),
-            '{instrument_key}'.format(**self.params['translations']),
-            '{instrument}'.format(**self.params['translations'])
+            # '{neutral_precursor_mass_key}'.format(**self.params['translations']),
+            # str(comp_mass),
+            # '{instrument_key}'.format(**self.params['translations']),
+            # '{instrument}'.format(**self.params['translations'])
         ]
-        pprint(self.params['command_list'])
 
         # # add flags if set
         if self.params['translations']['auto_charge'] is True:
@@ -90,25 +100,29 @@ class sirius_3_5(ursgal.UNode):
         if self.params['input_file'].endswith('.mgf'):
             # only add mgf file with flag -2
             self.params['command_list'] += [
-                self.params['input_file']
+                '-2',
+                os.path.join(
+                    self.params['input_dir_path'],
+                    self.params['input_file']
+                )
             ]
         elif self.params['input_file'].endswith('.ms'):
             # no need for -1 or -2 flag, just append filename
             self.params['command_list'] += [
                 self.params['input_file']
             ]
-        elif self.params['input_file'].endswith('.txt'):
-            # enable checking if its ms1 or ms2 file,
-            # then decide which flag to use
-            exit(1)
-            self.params['command_list'] += [
-                '{}'.format(**self.params['translations']),
-                '{}'.format(**self.params['translations'])
-            ]
+        # elif self.params['input_file'].endswith('.txt'):
+        #     # enable checking if its ms1 or ms2 file,
+        #     # then decide which flag to use
+        #     self.params['command_list'] += [
+        #         '{}'.format(**self.params['translations']),
+        #         '{}'.format(**self.params['translations'])
+        #     ]
         else:
             raise Exception(
                 'Invalid input file (Ursgal should have checked in before)'
             )
+        pprint(self.params['command_list'])
 
     def postflight(self):
         """DOC."""
