@@ -1,7 +1,6 @@
 #!/usr/bin/env python3.4
 import ursgal
 import os
-import rdkit
 
 
 class midas_1_1_0(ursgal.UNode):
@@ -11,8 +10,8 @@ class midas_1_1_0(ursgal.UNode):
     META_INFO = {
         'edit_version'                : 1.00,
         'name'                        : 'MIDAS',
-        'version'                     : 'v1.1',
-        'release_date'                : '2014',
+        'version'                     : '1.1.0',
+        'release_date'                : None,
         'engine_type' : {
             'search_engine' : True,
         },
@@ -27,7 +26,7 @@ class midas_1_1_0(ursgal.UNode):
         'engine': {
             'platform_independent': {
                 'arc_independent' : {
-                    'exe'            : 'midas_1_1.py',
+                    'exe'            : 'midas_1_1_0.py',
                     'url'            : '',
                     'zip_md5'        : '',
                     'additional_exe' : [],
