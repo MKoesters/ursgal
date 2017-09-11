@@ -20,159 +20,6 @@ ursgal_params = {
     #     },
     #     'uvalue_type': "bool",
     # },
-    # 'allowed_elements' : {
-    #     'available_in_unode': [
-    #         'sirius_3_5',
-    #     ],
-    #     'uvalue_option': {
-    #         'none_val': 0,
-    #         'multiple_line': False,
-    #     },
-    #     'default_value': 'CHNOP[5]S',
-    #     'description': """ Elements allowed in formula """,
-    #     'triggers_rerun': True,
-    #     'ukey_translation': {
-    #         'sirius_style_1': '-e'
-    #     },
-    #     'utag': [
-    #         'metabolomics',
-    #     ],
-    #     'uvalue_translation': {
-    #     },
-    #     'uvalue_type': "str",
-    # },
-    # 'ionization': {
-    #     'available_in_unode': [
-    #         'sirius_3_5',
-    #     ],
-    #     'uvalue_option': {
-    #         'none_val': 0,
-    #         'multiple_line': False,
-    #     },
-    #     'default_value': '[M+H]+',
-    #     'description': """ Desc """,
-    #     'triggers_rerun': True,
-    #     'ukey_translation': {
-    #         'sirius_style_1': '-i'
-    #     },
-    #     'utag': [
-    #         'metabolomics',
-    #     ],
-    #     'uvalue_translation': {
-    #     },
-    #     'uvalue_type': "str",
-    # },
-    # 'isotope_handling': {
-    #     'available_in_unode': [
-    #         'sirius_3_5',
-    #     ],
-    #     'uvalue_option': {
-    #         'none_val': 0,
-    #         'multiple_line': False,
-    #         'max': 20000,
-    #         'min': 0,
-    #         'updownval': 100,
-    #         'unit': 'a.u.',
-    #         'f-point': 1e-01
-
-    #     },
-    #     'default_value': 'both',
-    #     'description': """ Desc """,
-    #     'triggers_rerun': True,
-    #     'ukey_translation': {
-    #         'sirius_style_1': '-s'
-    #     },
-    #     'utag': [
-    #         'metbolomics',
-    #     ],
-    #     'uvalue_translation': {
-    #     },
-    #     'uvalue_type': "str",
-    # },
-    # 'auto_charge':{
-    #     'available_in_unode': [
-    #         'sirius_3_5',
-    #     ],
-    #     'uvalue_option': {
-    #         'none_val': None,
-    #         'multiple_line': False,
-    #     },
-    #     'default_value': True,
-    #     'description': '''Wether or not to write a rt info file''',
-    #     'triggers_rerun': True,
-    #     'ukey_translation': {
-    #         'sirius_style_1': '-Z'
-    #     },
-    #     'utag': [
-    #         'quantitation',
-    #     ],
-    #     'uvalue_translation': {
-    #     },
-    #     'uvalue_type': "bool",
-    # },
-    # 'recalibrate_sirius':{
-    #     'available_in_unode': [
-    #         'sirius_3_5',
-    #     ],
-    #     'uvalue_option': {
-    #         'none_val': None,
-    #         'multiple_line': False,
-    #     },
-    #     'default_value': True,
-    #     'description': '''Wether or not to write a rt info file''',
-    #     'triggers_rerun': True,
-    #     'ukey_translation': {
-    #         'sirius_style_1': '--no-recalibration'
-    #     },
-    #     'utag': [
-    #         'quantitation',
-    #     ],
-    #     'uvalue_translation': {
-    #     },
-    #     'uvalue_type': "bool",
-    # },
-    # 'noise_level': {
-    #     'available_in_unode': [
-    #         'sirius_3_5',
-    #     ],
-    #     'uvalue_option': {
-    #         'none_val': 0,
-    #         'multiple_line': False,
-    #     },
-    #     'default_value': 2000,
-    #     'description': """ Desc """,
-    #     'triggers_rerun': True,
-    #     'ukey_translation': {
-    #         'sirius_style_1': '--noise'
-    #     },
-    #     'uvalue_type': "float",
-    # },
-    # 'sirius_candidate_number': {
-    #     'edit_version': 1.00,
-    #     'available_in_unode': [
-    #         'sirius_3_5',
-    #     ],
-    #     'uvalue_option': {
-    #         'none_val': 0,
-    #         'multiple_line': False,
-    #         'max': 20000,
-    #         'min': 0,
-    #         'updownval': 1,
-    #         'unit': '',
-    #     },
-    #     'default_value': 10,
-    #     'description': """ Desc """,
-    #     'triggers_rerun': True,
-    #     'ukey_translation': {
-    #         'sirius_style_1': '-c'
-    #     },
-    #     'utag': [
-    #         'metabolomics',
-    #     ],
-    #     'uvalue_translation': {
-    #     },
-    #     'uvalue_type': "int",
-    # },
     'write_pyQms_rt_info': {
         'available_in_unode': [
             'pyQms_0_0_1',
@@ -1574,36 +1421,60 @@ ursgal_params = {
             'Path to database file containing protein sequences in fasta format\n'\
             '    \'\' : None',
     },
-    #  supply or calc?
-    # 'neutral_precursor_mass' : {
-    #     'available_in_unode': [
-    #         'sirius_3_5',
-    #     ],
-    #     'uvalue_option': {
-    #         'none_val': None,
-    #         'multiple_line': False,
-    #         'max': 1e10,
-    #         'min': 0,
-    #         'updownval': 1,
-    #         'unit': 'a.u.',
-    #         'f-point': 1e-05
+    'neutral_precursor_mass' : {
+        'available_in_unode': [
+            'metfrag_2_3_1',
+        ],
+        'uvalue_option': {
+            'none_val': None,
+            'multiple_line': False,
+            'max': 1e10,
+            'min': 0,
+            'updownval': 1,
+            'unit': 'a.u.',
+            'f-point': 1e-05
 
-    #     },
-    #     'default_value': 0,
-    #     'description': """ Desc """,
-    #     'triggers_rerun': True,
-    #     'ukey_translation': {
-    #         'sirius_style_1': '-z'
-    #     },
-    #     'utag': [
-    #         'quantitation',
-    #     ],
-    #     'uvalue_translation': {
-    #     },
-    #     'uvalue_type': "float",
-    # },
-    #'MetFrag_ionized_precursor_mass' : {
-    #},
+        },
+        'default_value': 0,
+        'description': """ Desc """,
+        'triggers_rerun': True,
+        'ukey_translation': {
+            'metfrag_style_1': '-z'
+        },
+        'utag': [
+            'quantitation',
+        ],
+        'uvalue_translation': {
+        },
+        'uvalue_type': "float",
+    },
+    'ionized_precursor_mass' : {
+        'available_in_unode': [
+            'metfrag_2_3_1',
+        ],
+        'uvalue_option': {
+            'none_val': None,
+            'multiple_line': False,
+            'max': 1e10,
+            'min': 0,
+            'updownval': 1,
+            'unit': 'a.u.',
+            'f-point': 1e-05
+
+        },
+        'default_value': 0,
+        'description': """ Desc """,
+        'triggers_rerun': True,
+        'ukey_translation': {
+            'metfrag_style_1': '-z'
+        },
+        'utag': [
+            'quantitation',
+        ],
+        'uvalue_translation': {
+        },
+        'uvalue_type': "float",
+    },
     'frag_mass_tolerance' : {
         'edit_version' : 1.00,
         'available_in_unode' : [

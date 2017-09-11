@@ -89,9 +89,7 @@ class metfrag_2_3_1(ursgal.UNode):
         with open(peak_file_path, 'wt') as fout:
             specReader = pymzml.run.Reader(path)
             for spec in specReader:
-                # if spec.ms_level == 2:
                 if spec['ms level'] == 2:
-                    #for mz, i in spec.peaks('centroided'):
                     for mz, i in spec.centroidedPeaks:
                         fout.write('{mz}\t{i}\n'.format(mz=mz, i=i))
                     break
