@@ -7,3 +7,4 @@ https://github.com/pyQms/pyqms/archive/master.zip
 coverage
 codecov
 tox
+pre-commit
