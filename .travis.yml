@@ -23,14 +23,14 @@ matrix:
     - python: 3.6
       env: TOXENV=docu
 
-  script:
-    - tox
-    - |
-      if [[ $TRAVIS_TAG ]]; then
-        # upload package to pypi
-        python setup.py sdist
-        python setup.py bdist_wheel --universal
-        pip install twine
-        twine upload dist/*
-        # upload docu
-      fi
+script:
+  - tox
+  - |
+    if [[ $TRAVIS_TAG ]]; then
+      # upload package to pypi
+      python setup.py sdist
+      python setup.py bdist_wheel --universal
+      pip install twine
+      twine upload dist/*
+      # upload docu
+    fi
