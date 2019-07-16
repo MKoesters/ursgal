@@ -26,23 +26,30 @@ def test_fix_crosstalk():
     breakpoint()
     pass
 
+
 def test_get_intensities():
     assert 1 == 2
+
 
 def test_extract_TMT_signals():
     pass
 
+
 def test_get_isotope_envelope():
     pass
+
 
 def test_calc_isotope_envelopes():
     pass
 
+
 def test_calculate_S2I():
     pass
 
+
 def test_correct_S2I():
     pass
+
 
 def test_calculate_P2T():
     pass

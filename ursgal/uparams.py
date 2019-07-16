@@ -110,19 +110,19 @@ Mass-Tag,126,127L,127H,128L,128H,129L,129H,130L,130H,131L,131H
             'available_values'  : ['da', 'mmu', 'ppm'],
             'custom_val_max' : 0,
         },
-        'default_value' : [
-            126.127726,
-            127.124761,
-            127.131081,
-            128.128116,
-            128.134436,
-            129.131471,
-            129.137790,
-            130.134825,
-            130.141145,
-            131.138180,
-            131.144499,
-        ],
+        'default_value' : {
+            '126'  : 126.127726,
+            '127L' : 127.124761,
+            '127H' : 127.131081,
+            '128L' : 128.128116,
+            '128H' : 128.134436,
+            '129L' : 129.131471,
+            '129H' : 129.137790,
+            '130L' : 130.134825,
+            '130H' : 130.141145,
+            '131L' : 131.138180,
+            '131H' : 131.144499,
+        },
         'description' : \
             'reporter mass tolerance unit: available in ppm '\
             '(parts-per-millon), da (Dalton) or mmu (Milli mass unit)',
@@ -5952,6 +5952,7 @@ Mass-Tag,126,127L,127H,128L,128H,129L,129H,130L,130H,131L,131H
             'pyqms_1_0_0',
             'pglyco_db_2_2_0',
             'deepnovo_0_0_1',
+            'TMT_quant_0_0_1',
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
@@ -5979,6 +5980,7 @@ Mass-Tag,126,127L,127H,128L,128H,129L,129H,130L,130H,131L,131H
             'pyqms_style_1' : 'modifications',
             'pglyco_db_style_1' : 'modifications',
             'deepnovo_style_1' : 'modifications',
+            'TMT_quant_style_1': 'modifications',
         },
         'utag' : [
             'modifications',
