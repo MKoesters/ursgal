@@ -11,14 +11,23 @@ from collections import OrderedDict as ODict
 from io import StringIO
 from pprint import pprint
 
+from scipy import linalg
 import numpy as np
 import pandas as pd
 import pymzml
 import pyqms
 
+PROTON = 1.007_276_466_583
+
 
 # @profile
-def fix_crosstalk(channels, impurity_matrix_inversed, params=None):
+def fix_crosstalk_linalg_solve(channels, matrix):
+    corrected_intensities = linalg.solve(matrix, channels)
+    return corrected_intensities
+
+
+# @profile
+def fix_crosstalk_dot(channels, impurity_matrix_inversed, params=None):
     """Correct crosstalk between TMT channels.
     
     Args:
@@ -26,7 +35,7 @@ def fix_crosstalk(channels, impurity_matrix_inversed, params=None):
         params (dict, optional): additional params
 
     """
-    corrected_intensities = impurity_matrix_inversed.dot(channels.T)
+    corrected_intensities = impurity_matrix_inversed.dot(channels)
     return corrected_intensities
 
 
@@ -115,7 +124,7 @@ def calc_isotope_envelopes(peptides, charges):
 
 # @profile
 def calculate_S2I(
-    ms1_spectrum, peptide, charge, isolation_window_borders, isotope_lib, cc_obj
+    ms1_spectrum, peptide, charge, isolation_window_borders
 ):
     """Calculate Signal to Intensity.
     
@@ -138,12 +147,12 @@ def calculate_S2I(
     all_ions_in_iso_border = all_ions_in_iso_border[
         upper_border > all_ions_in_iso_border[:, 0]
     ]
-    cc_obj.use(peptide)
-    formula = cc_obj.hill_notation_unimod()
-    isotope_mz = isotope_lib[formula]["env"][(("N", "0.000"),)][charge]["mz"]
+    isotope_mz = [peptide, peptide + (PROTON / charge)]
+    # isotope_mz = [(peptide + PROTON/charge) for charge in range(1, charge)]
     isotope_int = get_intensities(
         isotope_mz, all_ions_in_iso_border, tolerance_unit="ppm"
     )
+
     isotope_int_sum = sum(isotope_int.values())
     all_ions_int_sum = sum(all_ions_in_iso_border[:, 1]) + 0.000001
     S2I = isotope_int_sum / all_ions_int_sum
@@ -152,7 +161,7 @@ def calculate_S2I(
 
 # @profile
 def calculate_P2T(
-    ms1_spectrum, peptide, charge, isolation_window_borders, isotope_lib, cc_obj
+    ms1_spectrum, peptide, charge, isolation_window_borders
 ):
     """Calculate Precursor to Threshold.
     
@@ -171,9 +180,9 @@ def calculate_P2T(
     all_ions_in_iso_border = all_ions_in_iso_border[
         upper_border > all_ions_in_iso_border[:, 0]
     ]
-    cc_obj.use(peptide)
-    formula = cc_obj.hill_notation_unimod()
-    isotope_mz = isotope_lib[formula]["env"][(("N", "0.000"),)][charge]["mz"]
+    # pep_mass = (peptide * charge) - (charge * PROTON)
+    isotope_mz = [peptide, peptide + (PROTON / charge)]
+    # isotope_mz = [(pep_mass + PROTON/charge) for charge in range(1, charge)]
     isotope_int = get_intensities(
         isotope_mz, all_ions_in_iso_border, tolerance_unit="ppm"
     )
@@ -185,17 +194,23 @@ def calculate_P2T(
 
 
 # @profile
-def correct_S2I(ms1_spectrum, params=None):
+def correct_S2I(raw_channels, S2I):
     """Correct Signal 2 Intensity.
     
     To be implemented
-
+    
     Args:
-        spectrum (pymzml.spec.Spectrum): input spectrum
-        params (dict, optional): additional params
-
+        channels (np.ndarray): Description
+        S2I (float): Description
+    
+    
     """
-    raise NotImplementedError
+    normalized_channels = raw_channels / (raw_channels.sum() + 1e-5)
+    interfering_signal = sum(raw_channels * (1 - S2I))
+    interfering_signal_per_reporter = normalized_channels * interfering_signal
+    no_inference_channels = raw_channels - interfering_signal_per_reporter
+    corrected_channels = (no_inference_channels / (raw_channels.sum() + 1e-5))
+    return corrected_channels
 
 
 # @profile
@@ -217,54 +232,18 @@ def interpolate_qc(qc_e, qc_l, RT_e, RT_l, RT_ms2):
 
 
 # @profile
-def prepare_idents_df(csv_path):
-    """Prepare idents df by adding a column with peptide sequence and mods in unimod style.
-    
-    Args:
-        csv_path (str): path to ursgal unified idents csv.
-    
-    Returns:
-        pandas.DataFrame: pandas dataframe with `full_seq` column
-
-    """
-    validated_idents = pd.read_csv(csv_path)
-    validated_idents.sort_values("Spectrum ID", inplace=True)
-    validated_idents["Modifications"] = validated_idents["Modifications"].fillna("")
-    validated_idents["full_seq"] = (
-        validated_idents["Sequence"].astype(str)
-        + "#"
-        + validated_idents["Modifications"].astype(str)
-    )
-    validated_idents["full_seq"] = validated_idents["full_seq"].str.rstrip("#$")
-    validated_idents["full_seq"] = validated_idents["full_seq"].dropna()
-    return validated_idents
-
-
-# @profile
 def main(mzml_file, output_file, param_dict):
     """
     Perform quantification based on mzML input file.
     
     Take an mzML as input, remove coalescence of TMT channels, perform normalization
         and compute S2I and S2N.
-    
+
     Args:
         mzml_file (str): path to input mzml
         param_dict (dict): dict with all node related parameters
 
     """
-    validated_idents = prepare_idents_df(param_dict["quantification_evidences"])
-
-    all_charges = validated_idents["Charge"].unique()
-    isotope_lib = calc_isotope_envelopes(validated_idents["full_seq"], all_charges)
-    rt_pickle_path = os.path.join(
-        os.path.dirname(mzml_file), param_dict["rt_pickle_name"]
-    )
-    lookup = pickle.load(
-        open(
-            os.path.join(os.path.dirname(mzml_file), param_dict["rt_pickle_name"]), "rb"
-        )
-    )
     param_dict["reporter_ion_mzs"] = ODict(param_dict["reporter_ion_mzs"])
     trivial_names = param_dict["reporter_ion_mzs"].keys()
 
@@ -272,59 +251,78 @@ def main(mzml_file, output_file, param_dict):
     impurity_data = pd.read_csv(impurity_data)
 
     impurity_matrix = impurity_data.drop(columns="Mass-Tag").values
-    impurity_matrix_inversed = np.linalg.inv(impurity_matrix.T)
+    impurity_matrix_transposed = impurity_matrix.T
+    impurity_matrix_inversed = np.linalg.inv(impurity_matrix_transposed)
 
-    try:
-        basename = os.path.basename(mzml_file).split(".", 1)[0]
-        lookup = lookup[basename]
-    except KeyError:
-        raise KeyError(
-            "mzML file {0} not found in RT lookup. Please update RT Lookup with the input mzML and rerun Node".format(
-                os.path.basename(mzml_file)
-            )
-        )
     reader = pymzml.run.Reader(mzml_file)
     previous_ms2_idents = []
 
     all_lines = {}
-    all_data = {}
-    tmt_data = {}
-    S2I_data = {}
-    P2T_data = {}
-
-    cc_object = pyqms.chemical_composition.ChemicalComposition()
+    all_data  = {}
+    tmt_data  = {}
+    S2I_data  = {}
+    P2T_data  = {}
 
     for i, spec in enumerate(reader):
         if i % 500 == 0:
             print(f"Process spec {i}", end="\r")
+        if i > 10_000:
+            break
         if spec.ms_level == 1:
             ms1_spec = spec
             if len(previous_ms2_idents) > 0:
                 for ident_info in previous_ms2_idents:
+                    s2i_spec_data = S2I_data[ident_info["ID"]]
+                    p2t_spec_data = P2T_data[ident_info["ID"]]
                     S2I = calculate_S2I(
                         ms1_spec,
-                        ident_info["seq"],
+                        ident_info["mz"],
                         ident_info["charge"],
                         ident_info["isolation_window_borders"],
-                        isotope_lib,
-                        cc_object,
                     )
-                    S2I_data[ident_info["ID"]]["S2I_after"] = S2I
-                    S2I_data[ident_info["ID"]][
+                    s2i_spec_data["S2I_after"] = S2I
+                    s2i_spec_data[
                         "RT_after"
                     ] = ms1_spec.scan_time_in_minutes()
                     P2T = calculate_P2T(
                         ms1_spec,
-                        ident_info["seq"],
+                        ident_info["mz"],
                         ident_info["charge"],
                         ident_info["isolation_window_borders"],
-                        isotope_lib,
-                        cc_object,
                     )
-                    P2T_data[ident_info["ID"]]["P2T_after"] = P2T
-                    P2T_data[ident_info["ID"]][
+                    p2t_spec_data["P2T_after"] = P2T
+                    p2t_spec_data[
                         "RT_after"
                     ] = ms1_spec.scan_time_in_minutes()
+                    interpol_S2I = interpolate_qc(
+                        s2i_spec_data["S2I_before"],
+                        s2i_spec_data["S2I_after"],
+                        s2i_spec_data["RT_before"],
+                        s2i_spec_data["RT_after"],
+                        s2i_spec_data["RT_MS2"],
+                    )
+                    interpol_P2T = interpolate_qc(
+                        p2t_spec_data["P2T_before"],
+                        p2t_spec_data["P2T_after"],
+                        p2t_spec_data["RT_before"],
+                        p2t_spec_data["RT_after"],
+                        p2t_spec_data["RT_MS2"],
+                    )
+                    s2i_corrected_channels = correct_S2I(
+                        tmt_data[ident_info['ID']]['raw'], interpol_S2I
+                    )
+                    # breakpoint()
+                    # Implement normalization over peptides
+                    for i, channel in enumerate(tmt_data[ident_info['ID']]['raw']):
+                        # breakpoint()
+                        nd = {**all_lines[ident_info["ID"]]}
+                        nd['Quant Ion'] = list(trivial_names)[i]
+                        nd['rel Intensity'] = tmt_data[ident_info['ID']]['normalized'][i]
+                        nd['abs Intensity'] = tmt_data[ident_info['ID']]['raw'][i]
+                        nd['corr Intensity'] = s2i_corrected_channels[i]
+                        nd['P2T'] = interpol_P2T
+                        nd['S2I'] = interpol_S2I
+                        all_data[ident_info['ID']].append(nd)
                 previous_ms2_idents = []
         elif spec.ms_level == 2:
             ms2_spec = spec
@@ -334,34 +332,25 @@ def main(mzml_file, output_file, param_dict):
                 param_dict["reporter_ion_tolerance"],
                 param_dict["reporter_ion_tolerance_unit"],
             )
-            fixed_channels = fix_crosstalk(raw_channels, impurity_matrix_inversed)
+            # fixed_channels = fix_crosstalk_dot(raw_channels, impurity_matrix_transposed)
+            fixed_channels = fix_crosstalk_linalg_solve(raw_channels, impurity_matrix_inversed)
+            if all(fixed_channels == 0):
+                continue
+            # assert np.allclose(fixed_channels, fixed_channels2), f'{fixed_channels}\n{fixed_channels2}'
             normalized_channels = fixed_channels / fixed_channels.sum()
-            tmt_data[spec.ID] = fixed_channels
+            if spec.ID not in tmt_data:
+                tmt_data[spec.ID] = {'raw': None, 'fixed': None}
+            tmt_data[spec.ID]['raw'] = fixed_channels
+            tmt_data[spec.ID]['normalized'] = normalized_channels 
             if spec.ID not in all_data:
                 all_data[spec.ID] = []
-            if "Rank" in validated_idents.columns:
-                ident_line = validated_idents[
-                    (validated_idents["Spectrum ID"] == spec.ID)
-                    & (validated_idents["Rank"] == 1)
-                ]
-            elif "rank" in validated_idents:
-                ident_line = validated_idents[
-                    (validated_idents["Spectrum ID"] == spec.ID)
-                    & (validated_idents["rank"] == 1)
-                ]
-            if len(ident_line) == 0:
-                continue
-            current_ident = ident_line[["Sequence", "Modifications"]]
-            charge = ident_line["Charge"].iloc[0]
-            try:
-                full_seq = "#".join(current_ident.iloc[0])
-            except TypeError:
-                full_seq = current_ident["Sequence"]
+
             iso_mz = spec["isolation window target m/z"]
             lower_border = iso_mz - spec["isolation window lower offset"]
             upper_border = iso_mz + spec["isolation window upper offset"]
+            charge = spec["charge state"]
             ident_info = {
-                "seq": full_seq,
+                'mz': iso_mz,
                 "charge": charge,
                 "isolation_window_borders": (lower_border, upper_border),
                 "RT": ms2_spec.scan_time_in_minutes(),
@@ -370,11 +359,9 @@ def main(mzml_file, output_file, param_dict):
             previous_ms2_idents.append(ident_info)
             S2I = calculate_S2I(
                 ms1_spec,
-                ident_info["seq"],
+                ident_info['mz'],
                 ident_info["charge"],
                 ident_info["isolation_window_borders"],
-                isotope_lib,
-                cc_object,
             )
             if ms2_spec.ID not in S2I_data:
                 S2I_data[ms2_spec.ID] = {
@@ -386,11 +373,9 @@ def main(mzml_file, output_file, param_dict):
                 }
             P2T = calculate_P2T(
                 ms1_spec,
-                ident_info["seq"],
+                ident_info["mz"],
                 ident_info["charge"],
                 ident_info["isolation_window_borders"],
-                isotope_lib,
-                cc_object,
             )
             if ms2_spec.ID not in P2T_data:
                 P2T_data[ms2_spec.ID] = {
@@ -400,45 +385,212 @@ def main(mzml_file, output_file, param_dict):
                     "RT_after": None,
                     "RT_MS2": ms2_spec.scan_time_in_minutes(),
                 }
-            all_lines[ms2_spec.ID] = []
-            for i, channel in enumerate(fixed_channels):
-                seq, mods = full_seq.split("#")
-                line = ODict(
-                    {
-                        "Spectrum ID": ms2_spec.ID,
-                        "Sequence": seq,
-                        "Modifications": mods,
-                        "Charge": charge,
-                        "RT": ms2_spec.scan_time_in_minutes(),
-                        "Quant Ion": list(trivial_names)[i],
-                        "rel Intensity": normalized_channels[i],
-                        "abs Intensity": fixed_channels[i],
-                        "S2I": None,
-                        "P2T": None,
-                        "Protein ID": ident_line["Protein ID"].iloc[0],
-                    }
-                )
-                all_lines[ms2_spec.ID].append(line)
-    for key, value in S2I_data.items():
-        interpol_S2I = interpolate_qc(
-            value["S2I_before"],
-            value["S2I_after"],
-            value["RT_before"],
-            value["RT_after"],
-            value["RT_MS2"],
-        )
-        for data_dict in all_lines[key]:
-            data_dict["S2I"] = interpol_S2I
-    for key, value in P2T_data.items():
-        interpol_P2T = interpolate_qc(
-            value["P2T_before"],
-            value["P2T_after"],
-            value["RT_before"],
-            value["RT_after"],
-            value["RT_MS2"],
-        )
-        for data_dict in all_lines[key]:
-            data_dict["P2T"] = interpol_P2T
-    flat = [item for list in all_lines.values() for item in list]
+            # all_lines[ms2_spec.ID] = []
+            # for i, channel in enumerate(fixed_channels):
+            line = ODict(
+                {
+                    "Spectrum ID": ms2_spec.ID,
+                    "Charge": charge,
+                    "RT": ms2_spec.scan_time_in_minutes(),
+                    "Quant Ion": list(trivial_names),
+                    "rel Intensity": normalized_channels,
+                    "abs Intensity": fixed_channels,
+                    "S2I": None,
+                    "P2T": None,
+                }
+            )
+            all_lines[ms2_spec.ID] = line
+    flat = [item for list in all_data.values() for item in list]
     final_df = pd.DataFrame(flat)
+    float_cols = {
+        'rel Intensity': 5,
+        'abs Intensity': 5,
+        'RT': 3,
+        'S2I': 5,
+        'P2T': 5,
+    }
+    final_df = final_df.round(float_cols)
+    # sometimes there are -0 and 0, making it hard to compare files using hashes
+    final_df['rel Intensity'] += 0.0
+    final_df['abs Intensity'] += 0.0
     final_df.to_csv(output_file, index=False)
+
+# @profile
+def process_previous_idents(scan_numbers, ms1_spec, data_collections):
+    for scan in scan_numbers:
+        line = data_collections[scan]
+        line['RT After'] = ms1_spec.scan_time_in_minutes()
+        S2I = calculate_S2I(
+            ms1_spec,
+            line['Iso mz'],
+            line['charge'],
+            (
+                line['lower isolation window border'],
+                line['upper isolation window border'],
+            ),
+        )
+        P2T = calculate_P2T(
+            ms1_spec,
+            line['Iso mz'],
+            line['charge'],
+            (
+                line['lower isolation window border'],
+                line['upper isolation window border'],
+            ),
+        )
+
+        line['S2I After'] = S2I
+        line['P2T After'] = P2T
+
+        interpol_S2I = interpolate_qc(
+            line['S2I Before'],
+            line['S2I After'],
+            line["RT Before"],
+            line["RT After"],
+            line["Retention time (minutes)"],
+        )
+        interpol_P2T = interpolate_qc(
+            line['P2T Before'],
+            line['P2T After'],
+            line["RT Before"],
+            line["RT After"],
+            line["Retention time (minutes)"],
+        )
+
+        line['S2I interpolated'] = interpol_S2I
+        line['P2T interpolated'] = interpol_P2T
+
+
+# @profile
+def normalize_row(row):
+    tmt_cols = [key for key in row.keys() if key.startswith('1')]
+    # if any(row[tmt_cols]) > 0:
+    #     breakpoint()
+    normalized = row[tmt_cols] / row[tmt_cols].sum()
+    return normalized
+
+# @profile
+def correct_S2I_row(row):
+    """Correct Signal 2 Intensity.
+    
+    To be implemented
+    
+    Args:
+        channels (np.ndarray): Description
+        S2I (float): Description
+
+    """
+    S2I = row['S2I interpolated']
+    tmt_cols = [col for col in row.keys() if col.startswith('1')]
+    raw_channels = row[tmt_cols]
+    normalized_channels = raw_channels / (raw_channels.sum() + 1e-5)
+    interfering_signal = sum(raw_channels * (1 - S2I))
+    interfering_signal_per_reporter = normalized_channels * interfering_signal
+    no_inference_channels = raw_channels - interfering_signal_per_reporter
+    corrected_channels = (no_inference_channels / (raw_channels.sum() + 1e-5))
+    return corrected_channels
+
+# @profile
+def main2(mzml_file, output_file, param_dict):
+    param_dict["reporter_ion_mzs"] = ODict(param_dict["reporter_ion_mzs"])
+    trivial_names = list(param_dict["reporter_ion_mzs"].keys())
+
+    impurity_data = StringIO(param_dict["impurity_matrix"])
+    impurity_data = pd.read_csv(impurity_data)
+
+    impurity_matrix = impurity_data.drop(columns="Mass-Tag").values
+    impurity_matrix_transposed = impurity_matrix.T
+    impurity_matrix_inversed = np.linalg.inv(impurity_matrix_transposed)
+
+    reader = pymzml.run.Reader(mzml_file)
+    previous_ms2_idents = []
+
+    data_colletions = {}
+    EMPTY = 0
+
+    for i, spec in enumerate(reader):
+        if i % 100 == 0:
+            print(f"Process spec {i}", end="\r")
+        if i > 10_000:
+            break
+        if spec.ms_level == 1:
+            ms1_spec = spec
+            if len(previous_ms2_idents) > 0:
+                process_previous_idents(previous_ms2_idents, ms1_spec, data_colletions)
+            previous_ms2_idents = []
+        elif spec.ms_level == 2:
+            ms2_spec = spec
+            raw_channels = extract_reporter_signals(
+                ms2_spec,
+                param_dict["reporter_ion_mzs"],
+                param_dict["reporter_ion_tolerance"],
+                param_dict["reporter_ion_tolerance_unit"],
+            )
+            fixed_channels = fix_crosstalk_dot(raw_channels, impurity_matrix_transposed)
+            # fixed_channels = fix_crosstalk_linalg_solve(raw_channels, impurity_matrix_inversed)
+            if all(fixed_channels == 0):
+                EMPTY += 1
+                continue
+            if spec.ID not in data_colletions:
+                data_colletions[spec.ID] = {}
+            iso_mz = spec["isolation window target m/z"]
+            lower_border = iso_mz - spec["isolation window lower offset"]
+            upper_border = iso_mz + spec["isolation window upper offset"]
+            charge = int(spec["charge state"])
+
+            for i, name in enumerate(trivial_names):
+                data_colletions[spec.ID][name] = fixed_channels[i]
+
+            S2I = calculate_S2I(
+                ms1_spec,
+                iso_mz,
+                charge,
+                (lower_border, upper_border),
+            )
+            P2T = calculate_P2T(
+                ms1_spec,
+                iso_mz,
+                charge,
+                (lower_border, upper_border),
+            )
+
+            data_colletions[spec.ID]['charge'] = charge
+            data_colletions[spec.ID]['Iso mz'] = iso_mz
+            data_colletions[spec.ID]['lower isolation window border'] = lower_border
+            data_colletions[spec.ID]['upper isolation window border'] = upper_border
+            data_colletions[spec.ID]['Retention time (minutes)'] = ms2_spec.scan_time_in_minutes()
+            data_colletions[spec.ID]['Spectrum ID'] = spec.ID
+            data_colletions[spec.ID]['S2I Before'] = S2I
+            data_colletions[spec.ID]['P2T Before'] = P2T
+            data_colletions[spec.ID]['RT Before'] = ms1_spec.scan_time_in_minutes()
+
+            previous_ms2_idents.append(spec.ID)
+
+    print(f'Skipped {EMPTY} specs.')
+    flat = [line for line in data_colletions.values()]
+    dataframe = pd.DataFrame(flat)
+    tmt_cols = [col for col in dataframe.columns if col.startswith('1')]
+    not_tmt_cols = [col for col in dataframe.columns if not col.startswith('1')]
+    
+    # normalize over peptides
+    # LEAVE OUT TO COMAPRE WITH main
+    # all_intensities = dataframe[tmt_cols].aggregate('sum')
+    # medians = dataframe[tmt_cols].aggregate('median')
+    # dataframe[tmt_cols] = dataframe[tmt_cols] / all_intensities
+
+    # normalize over channels
+    # normalize channels
+    # dataframe[tmt_cols] = dataframe.apply(normalize, axis=1)
+    # correct S2I
+    dataframe[tmt_cols] = dataframe.apply(correct_S2I_row, axis=1)
+    # dataframe[tmt_cols] = dataframe.apply(normalize_row, axis=1)
+    # breakpoint()
+    dataframe.to_csv(output_file, index=False)
+    dataframe = \
+        dataframe.melt(
+            id_vars=not_tmt_cols,
+            var_name="Quant Ion",
+            value_name="Intensity"
+        )
+    # breakpoint()
+    dataframe.to_csv(output_file.replace('.csv', '')+'_melted.csv', index=False)

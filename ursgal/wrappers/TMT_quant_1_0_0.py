@@ -16,7 +16,7 @@ class TMT_quant_0_0_1(ursgal.UNode):
     META_INFO = {
         "edit_version": 1.00,
         "name": "TMT quant",
-        "version": "1.0.0",
+        "version": "0.0.1",
         "release_date": None,
         "engine_type": {"quantification_engine": True},
         "input_extensions": [".mzML", "mzML.gz"],
@@ -37,10 +37,7 @@ class TMT_quant_0_0_1(ursgal.UNode):
         super(TMT_quant_0_0_1, self).__init__(*args, **kwargs)
 
     def _execute(self):
-        from pprint import pprint
-
-        # breakpoint()
-        main = self.import_engine_as_python_function()
+        main = self.import_engine_as_python_function('main2')
         mzml_file = os.path.join(
             self.params["input_dir_path"], self.params["input_file"]
         )
