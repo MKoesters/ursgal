@@ -5,3 +5,4 @@ pyahocorasick>=1.1.4; sys_platform != 'win32'
 pyqms
 tox
 pandas
+scipy==1.3.0

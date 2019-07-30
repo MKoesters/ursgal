@@ -2,7 +2,7 @@ ursgal_params = {
     'reporter_ion_tolerance': {
         'edit_version': 1.00,
         'available_in_unode' : [
-            'TMT_quant_0_0_1',
+            'TMT_quant_1_0_0',
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
@@ -14,13 +14,14 @@ ursgal_params = {
         ],
         'uvalue_translation' : {
         },
-        'uvalue_type' : 'int',
+        'uvalue_type' : 'float',
         'uvalue_option' : {
             'none_val'  : None,
             'max'       : 10000000,
             'min'       : 0,
             'updownval' : 1,
-            'unit'      : ''
+            'unit'      : '',
+            'f-point'   : 0.2
         },
         'default_value' : 0.002,
         'description' : \
@@ -29,7 +30,7 @@ ursgal_params = {
     'reporter_ion_tolerance_unit': {
         'edit_version' : 1.01,
         'available_in_unode' : [
-            'TMT_quant_0_0_1',
+            'TMT_quant_1_0_0',
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
@@ -55,7 +56,7 @@ ursgal_params = {
     'impurity_matrix': {
         'edit_version' : 1.01,
         'available_in_unode' : [
-            'TMT_quant_0_0_1',
+            'TMT_quant_1_0_0',
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
@@ -92,7 +93,7 @@ Mass-Tag,126,127L,127H,128L,128H,129L,129H,130L,130H,131L,131H
     'reporter_ion_mzs':{
         'edit_version' : 1.01,
         'available_in_unode' : [
-            'TMT_quant_0_0_1',
+            'TMT_quant_1_0_0',
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
@@ -104,11 +105,14 @@ Mass-Tag,126,127L,127H,128L,128H,129L,129H,130L,130H,131L,131H
         ],
         'uvalue_translation' : {
         },
-        'uvalue_type' : 'select',
+        'uvalue_type' : 'dict',
         'uvalue_option' : {
             'select_type' : 'radio_button',
             'available_values'  : ['da', 'mmu', 'ppm'],
             'custom_val_max' : 0,
+            'none_val': None,
+            'item_titles': {'126': '126'},
+            'value_types': {},
         },
         'default_value' : {
             '126'  : 126.127726,
@@ -743,14 +747,14 @@ Mass-Tag,126,127L,127H,128L,128H,129L,129H,130L,130H,131L,131H
         'edit_version' : 1.00,
         'available_in_unode': [
             'pyqms_1_0_0',
-            'TMT_quant_0_0_1'
+            # 'TMT_quant_1_0_0'
         ],
-        'default_value': '',
+        'default_value': None,
         'description':  ''' Molecules to quantify. Can be either a list of strings or a csv file ''',
         'triggers_rerun': True,
         'ukey_translation': {
             'pyqms_style_1': 'evidences',
-            'TMT_quant_style_1': 'evidences'
+            # 'TMT_quant_style_1': 'evidences'
         },
         'uvalue_option': {
             'none_val': [None],
@@ -5952,7 +5956,7 @@ Mass-Tag,126,127L,127H,128L,128H,129L,129H,130L,130H,131L,131H
             'pyqms_1_0_0',
             'pglyco_db_2_2_0',
             'deepnovo_0_0_1',
-            'TMT_quant_0_0_1',
+            'TMT_quant_1_0_0',
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {
@@ -8824,7 +8828,7 @@ Mass-Tag,126,127L,127H,128L,128H,129L,129H,130L,130H,131L,131H
             'sugarpy_run_1_0_0',
             'sugarpy_plot_1_0_0',
             'mgf_to_rt_lookup_1_0_0',
-            'TMT_quant_0_0_1',
+            'TMT_quant_1_0_0',
         ],
         'triggers_rerun' : True,
         'ukey_translation' : {

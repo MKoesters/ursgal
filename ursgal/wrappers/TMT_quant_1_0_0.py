@@ -6,7 +6,7 @@ import sys
 import ursgal
 
 
-class TMT_quant_0_0_1(ursgal.UNode):
+class TMT_quant_1_0_0(ursgal.UNode):
     """TMT_quant_0_0_1 UNode
 
     Takes an mzML as input, removes coalescence of TMT channels, performs normalization
@@ -19,7 +19,7 @@ class TMT_quant_0_0_1(ursgal.UNode):
         "version": "0.0.1",
         "release_date": None,
         "engine_type": {"quantification_engine": True},
-        "input_extensions": [".mzML", "mzML.gz"],
+        "input_extensions": [".mzML", ".mzML.gz"],
         "output_extensions": [".csv"],
         "create_own_folder": True,
         # 'output_suffix'      : '',
@@ -34,10 +34,10 @@ class TMT_quant_0_0_1(ursgal.UNode):
     }
 
     def __init__(self, *args, **kwargs):
-        super(TMT_quant_0_0_1, self).__init__(*args, **kwargs)
+        super(TMT_quant_1_0_0, self).__init__(*args, **kwargs)
 
     def _execute(self):
-        main = self.import_engine_as_python_function('main2')
+        main = self.import_engine_as_python_function("main")
         mzml_file = os.path.join(
             self.params["input_dir_path"], self.params["input_file"]
         )

@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Ursgal main resource for TMT quantification.
 
-Takes an mzML as input, removes coalescence of TMT channels, performs normalization
-and computes S2I and S2N 
+Takes an mzML as input, removes crosstalk of TMT channels, performs normalization
+and computes S2I and P2T
 """
 import os
 import pickle
 import time
 from collections import OrderedDict as ODict
 from io import StringIO
-from pprint import pprint
 
 from scipy import linalg
 import numpy as np
@@ -47,8 +46,11 @@ def get_intensities(
     
     Args:
         masses (list): list of masses/mz values to extract from spectrum
-        spectrum (pymzml.spec.Spectrum): Description
-
+        all_peaks (np.ndarray): mz, i array
+        tolerance_unit (str, optional): tolerane unit
+        tolerance_ppm (float, optional): use tolerance in ppm (relative)
+        tolerance_da (float, optional): use tolerance in da (absolute)
+    
     """
     signals = {}
     if tolerance_unit.lower() == "ppm":
@@ -66,13 +68,17 @@ def get_intensities(
 
 
 # @profile
-def extract_reporter_signals(ms2_spectrum, reporter_ions, tolerance, unit):
+def extract_reporter_signals(ms2_spectrum, reporter_ions, tolerance):
     """Extract signals of given reporter ions.
     
     Args:
         ms2_spectrum (pymzml.spec.Spectrum): input MS2 spectrum
-        TMT_type (str): Type of TMT used (6Plex, 8Plex, 10/11plex, 20plex)
-
+        reporter_ions (dict): dict mapping reporter ion name to mass
+        tolerance (TYPE): tolerance in dalton
+    
+    Returns:
+        list: sorted list of reporter intensities
+    
     """
     all_peaks = ms2_spectrum.peaks("centroided")
     if not len(all_peaks) == 0:
@@ -94,35 +100,6 @@ def extract_reporter_signals(ms2_spectrum, reporter_ions, tolerance, unit):
 
 
 # @profile
-def calc_isotope_envelopes(peptides, charges):
-    """Calculate isotope envelopes of given peptides in all supplied charge states.
-    
-    Args:
-        peptides (list): list of peptide strings in unimod style
-        charges (list): list of charge stats as integers
-    
-    Returns:
-        pyqms.IsotopologueLibrary: pyqms generated library of isotopes
-
-    """
-    cc = pyqms.chemical_composition.ChemicalComposition()
-    cc2pep = {}
-    for pep in peptides:
-        cc.use(pep)
-        cc2pep[cc.hill_notation_unimod()] = pep
-    print("Start calculating isotopes")
-    lib = pyqms.IsotopologueLibrary(
-        molecules=list(peptides), charges=list(charges), verbose=False
-    )
-    print("Finished calculating isotopes")
-    # for cc, pep in cc2pep.items():
-    #     if cc in lib:
-    #         lib[pep] = lib[cc]
-    #         del lib[cc]
-    return lib
-
-
-# @profile
 def calculate_S2I(
     ms1_spectrum, peptide, charge, isolation_window_borders
 ):
@@ -137,9 +114,6 @@ def calculate_S2I(
         charge (int): charge of the precursor peptide
         isolation_window_borders (tuple): upper and lower precurso isolation border
     
-    Returns:
-        float: signal 2 intensity
-
     """
     lower_border, upper_border = isolation_window_borders
     mz = ms1_spectrum.peaks("centroided")
@@ -148,7 +122,6 @@ def calculate_S2I(
         upper_border > all_ions_in_iso_border[:, 0]
     ]
     isotope_mz = [peptide, peptide + (PROTON / charge)]
-    # isotope_mz = [(peptide + PROTON/charge) for charge in range(1, charge)]
     isotope_int = get_intensities(
         isotope_mz, all_ions_in_iso_border, tolerance_unit="ppm"
     )
@@ -172,7 +145,7 @@ def calculate_P2T(
         peptide (str): peptide sequence with mods in unimod style
         charge (int): charge of the precursor peptide
         isolation_window_borders (tuple): upper and lower precurso isolation border
-
+    
     """
     lower_border, upper_border = isolation_window_borders
     mz = ms1_spectrum.peaks("centroided")
@@ -180,9 +153,7 @@ def calculate_P2T(
     all_ions_in_iso_border = all_ions_in_iso_border[
         upper_border > all_ions_in_iso_border[:, 0]
     ]
-    # pep_mass = (peptide * charge) - (charge * PROTON)
     isotope_mz = [peptide, peptide + (PROTON / charge)]
-    # isotope_mz = [(pep_mass + PROTON/charge) for charge in range(1, charge)]
     isotope_int = get_intensities(
         isotope_mz, all_ions_in_iso_border, tolerance_unit="ppm"
     )
@@ -200,9 +171,11 @@ def correct_S2I(raw_channels, S2I):
     To be implemented
     
     Args:
-        channels (np.ndarray): Description
-        S2I (float): Description
+        raw_channels (np.ndarray): array with measured channel intensities
+        S2I (float): Signal 2 Intensity
     
+    Returns:
+        np.ndarray: array with S2I corrected intensities
     
     """
     normalized_channels = raw_channels / (raw_channels.sum() + 1e-5)
@@ -226,7 +199,7 @@ def interpolate_qc(qc_e, qc_l, RT_e, RT_l, RT_ms2):
     
     Returns:
         float: Interpolated QC value
-
+    
     """
     return (RT_ms2 - RT_e) * ((qc_l - qc_e) / (RT_l - RT_e)) + qc_e
 
@@ -238,11 +211,12 @@ def main(mzml_file, output_file, param_dict):
     
     Take an mzML as input, remove coalescence of TMT channels, perform normalization
         and compute S2I and S2N.
-
+    
     Args:
         mzml_file (str): path to input mzml
+        output_file (str): path to output csv
         param_dict (dict): dict with all node related parameters
-
+    
     """
     param_dict["reporter_ion_mzs"] = ODict(param_dict["reporter_ion_mzs"])
     trivial_names = param_dict["reporter_ion_mzs"].keys()
@@ -266,8 +240,6 @@ def main(mzml_file, output_file, param_dict):
     for i, spec in enumerate(reader):
         if i % 500 == 0:
             print(f"Process spec {i}", end="\r")
-        if i > 10_000:
-            break
         if spec.ms_level == 1:
             ms1_spec = spec
             if len(previous_ms2_idents) > 0:
@@ -330,7 +302,6 @@ def main(mzml_file, output_file, param_dict):
                 ms2_spec,
                 param_dict["reporter_ion_mzs"],
                 param_dict["reporter_ion_tolerance"],
-                param_dict["reporter_ion_tolerance_unit"],
             )
             # fixed_channels = fix_crosstalk_dot(raw_channels, impurity_matrix_transposed)
             fixed_channels = fix_crosstalk_linalg_solve(raw_channels, impurity_matrix_inversed)
@@ -385,8 +356,6 @@ def main(mzml_file, output_file, param_dict):
                     "RT_after": None,
                     "RT_MS2": ms2_spec.scan_time_in_minutes(),
                 }
-            # all_lines[ms2_spec.ID] = []
-            # for i, channel in enumerate(fixed_channels):
             line = ODict(
                 {
                     "Spectrum ID": ms2_spec.ID,
@@ -464,8 +433,6 @@ def process_previous_idents(scan_numbers, ms1_spec, data_collections):
 # @profile
 def normalize_row(row):
     tmt_cols = [key for key in row.keys() if key.startswith('1')]
-    # if any(row[tmt_cols]) > 0:
-    #     breakpoint()
     normalized = row[tmt_cols] / row[tmt_cols].sum()
     return normalized
 
@@ -473,12 +440,12 @@ def normalize_row(row):
 def correct_S2I_row(row):
     """Correct Signal 2 Intensity.
     
-    To be implemented
-    
     Args:
-        channels (np.ndarray): Description
-        S2I (float): Description
-
+        row (pandas.core.series.Series): row from a pandas dataframe
+        
+    Returns:
+        np.ndarray: row with S2I corrected channels.
+    
     """
     S2I = row['S2I interpolated']
     tmt_cols = [col for col in row.keys() if col.startswith('1')]
@@ -509,10 +476,8 @@ def main2(mzml_file, output_file, param_dict):
     EMPTY = 0
 
     for i, spec in enumerate(reader):
-        if i % 100 == 0:
+        if i % 500 == 0:
             print(f"Process spec {i}", end="\r")
-        if i > 10_000:
-            break
         if spec.ms_level == 1:
             ms1_spec = spec
             if len(previous_ms2_idents) > 0:
@@ -524,7 +489,7 @@ def main2(mzml_file, output_file, param_dict):
                 ms2_spec,
                 param_dict["reporter_ion_mzs"],
                 param_dict["reporter_ion_tolerance"],
-                param_dict["reporter_ion_tolerance_unit"],
+                # param_dict["reporter_ion_tolerance_unit"],
             )
             fixed_channels = fix_crosstalk_dot(raw_channels, impurity_matrix_transposed)
             # fixed_channels = fix_crosstalk_linalg_solve(raw_channels, impurity_matrix_inversed)
@@ -573,24 +538,23 @@ def main2(mzml_file, output_file, param_dict):
     not_tmt_cols = [col for col in dataframe.columns if not col.startswith('1')]
     
     # normalize over peptides
-    # LEAVE OUT TO COMAPRE WITH main
-    # all_intensities = dataframe[tmt_cols].aggregate('sum')
-    # medians = dataframe[tmt_cols].aggregate('median')
-    # dataframe[tmt_cols] = dataframe[tmt_cols] / all_intensities
+    all_intensities = dataframe[tmt_cols].aggregate('sum')
+    medians = dataframe[tmt_cols].aggregate('median')
+    dataframe[tmt_cols] = dataframe[tmt_cols] / all_intensities
 
     # normalize over channels
     # normalize channels
     # dataframe[tmt_cols] = dataframe.apply(normalize, axis=1)
+
     # correct S2I
     dataframe[tmt_cols] = dataframe.apply(correct_S2I_row, axis=1)
-    # dataframe[tmt_cols] = dataframe.apply(normalize_row, axis=1)
-    # breakpoint()
-    dataframe.to_csv(output_file, index=False)
+    dataframe[tmt_cols] = dataframe.apply(normalize_row, axis=1)
+
+    # melto to longformat
     dataframe = \
         dataframe.melt(
             id_vars=not_tmt_cols,
             var_name="Quant Ion",
             value_name="Intensity"
         )
-    # breakpoint()
-    dataframe.to_csv(output_file.replace('.csv', '')+'_melted.csv', index=False)
+    dataframe.to_csv(output_file, index=False)
