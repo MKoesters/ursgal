@@ -4,8 +4,8 @@ import os
 from io import StringIO
 import numpy as np
 import pandas as pd
-import pytest
 from pyqms.chemical_composition import ChemicalComposition
+from collections import OrderedDict as ODict
 
 import sys
 
@@ -33,9 +33,10 @@ from TMT_quant_1_0_0 import (
     get_intensities,
     interpolate_qc,
     correct_S2I,
+    extract_reporter_signals,
 )
 
-PROTON = 1.007_276_466_583
+PROTON = 1.007276466583
 
 
 ISOTOPE_OVERLAP1 = """
@@ -80,7 +81,7 @@ def _correct_S2I(S2I, result):
 
 
 def test_correct_S2I():
-    cases =  [(1, [0.25, 0.5, 0.25]), (0.5, [0.125, 0.25, 0.125]), (0, [0, 0, 0])]
+    cases = [(1, [0.25, 0.5, 0.25]), (0.5, [0.125, 0.25, 0.125]), (0, [0, 0, 0])]
     for c in cases:
         yield _correct_S2I, c[0], c[1]
 
@@ -100,7 +101,7 @@ def _fix_crosstalk_dot(matrix, result):
 
 
 def test_fix_crosstalk():
-    cases =  [
+    cases = [
         (ISOTOPE_OVERLAP1, [95, 100, 105]),
         (ISOTOPE_OVERLAP2, [100, 50, 150]),
         (ISOTOPE_OVERLAP3, [50, 100, 150]),
@@ -160,7 +161,7 @@ def test_compare_crosstalk_solvers():
 
 def _get_intensities(mz, peaks, unit, tol, expected_result):
     """Test extracting intensities for given masses from peak list.
-    
+
     Args:
         mz (list): mz to extract
         peaks (np.array): peak list
@@ -246,7 +247,7 @@ def test_get_intensities():
 
 # def _calc_isotope_envelopes(peptides, charges, expected_results):
 #     """Test calculation of isotope envelopes.
-    
+
 #     Args:
 #         peptides (list): list of peptide sequences
 #         charges (list): list of charge states
@@ -268,9 +269,10 @@ def test_get_intensities():
 #     for c in cases:
 #         yield _calc_isotope_envelopes, c[0], c[1], c[2]
 
+
 def _calculate_S2I(ms1_spec, peptide, charge, window, result):
     """Test signal 2 intensity calculation
-    
+
     Args:
         ms1_spec (Spectrum): spectrum class with peaks() and estimated_noise_level methods
         peptide (str): peptide sequence
@@ -434,6 +436,74 @@ def test_interpolate_qc():
     ]
     for c in cases:
         yield _interpolate_qc, c[0], c[1]
+
+
+def _extract_reporter_signals(input_data, output):
+    peaks, tol, tol_unit = input_data
+    spec = Spectrum(peaks=peaks)
+    print(peaks)
+    result = extract_reporter_signals(spec, rep_ions, tol, tol_unit)
+    print()
+    print(result)
+    print(intensites)
+    assert (result == output).all()
+
+
+# always keep this dict ordered!
+rep_ions = ODict(
+    {
+        "126": 126.127726,
+        "127L": 127.124761,
+        "127H": 127.131081,
+        "128L": 128.128116,
+        "128H": 128.134436,
+        "129L": 129.131471,
+        "129H": 129.137790,
+        "130L": 130.134825,
+        "130H": 130.141145,
+        "131L": 131.138180,
+        "131H": 131.144499,
+    }
+)
+
+intensites = [100 for x in range(len(rep_ions))]
+peaks = np.array(list(zip(rep_ions.values(), intensites)))
+
+r_shift_mz = [i + 0.002 for i in rep_ions.values()]
+r_shift_peaks = np.array(list(zip(r_shift_mz, intensites)))
+
+l_shift_mz = [i - 0.0020 for i in rep_ions.values()]
+l_shift_peaks = np.array(list(zip(l_shift_mz, intensites)))
+
+off_shift_mz = [i - 5 for i in rep_ions.values()]
+off_shift_peaks = np.array(list(zip(off_shift_mz, intensites)))
+
+# breakpoint()
+
+
+def test_extract_reporter_signals():
+    cases = [
+        # standard match
+        ((peaks, 0.002, "da"), intensites),
+        # exact match
+        ((peaks, 0.000, "da"), intensites),
+        # exact match ppm
+        ((peaks, 0, "ppm"), intensites),
+        # standard match ppm
+        ((peaks, 20, "ppm"), intensites),
+        # shift everything right and match
+        # exactly 0.002 does not work for some reason, however precision is exactly
+        # 2.000000e-03
+        ((r_shift_peaks, 0.0020001, "da"), intensites),
+        # shift everything left and match
+        # exactly 0.002 does not work for some reason, however precision is exactly
+        # 2.000000e-03
+        ((l_shift_peaks, 0.0020001, "da"), intensites),
+        # match peaks with are way off, should not match and return 0 intensities
+        ((off_shift_peaks, 0.002, "da"), [0 for x in range(len(rep_ions))]),
+    ]
+    for c in cases:
+        yield _extract_reporter_signals, c[0], c[1]
 
 
 if __name__ == "__main__":
