@@ -32,6 +32,7 @@ if sys.platform != 'win32':
 
 
 DIFFERENCE_14N_15N = ursgal.ukb.DIFFERENCE_14N_15N
+MOD_POS_PATTERN = re.compile(r'(?P<modname>.*):(?P<pos>[0-9]*)$')
 
 
 def main(input_file=None, output_file=None, scan_rt_lookup=None,
@@ -94,6 +95,9 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
         * 15N modification have to be removed from Modifications and the
           merged modifications have to be corrected.
 
+    pGlyco
+        * reformat modifications
+        * reformat glycan
     '''
     print(
         '''
@@ -110,6 +114,7 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
     do_not_delete         = False
     created_tmp_files     = []
     use15N                = False
+    search_engine         = search_engine.lower()
 
     if 'label' in params.keys():
         if params['label'] == '15N':
@@ -133,9 +138,9 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
 
     # modification masses are rounded to allow matching to unimod
     no_decimals = params['translations']['rounded_mass_decimals']
-    if 'pipi' in search_engine.lower():
+    if 'pipi' in search_engine:
         no_decimals = 1
-    if 'moda' in search_engine.lower():
+    if 'moda' in search_engine:
         no_decimals = 0
     mass_format_string = '{{0:3.{0}f}}'.format(no_decimals)
 
@@ -170,7 +175,7 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
             if mod_type == 'opt':
                 opt_mods[aa] = name
 
-    if 'msfragger' in search_engine.lower():
+    if 'msfragger' in search_engine:
         ##########################
         # msfragger mod merge block
         # calculate possbile mod combos...
@@ -252,6 +257,7 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
         'novor',
         'pepnovo',
         'uninovo',
+        'deepnovo',
         'unknown_engine'
     ]
     database_search_engines = [
@@ -261,6 +267,7 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
         'omssa',
         'xtandem',
         'msfragger',
+        'pglyco',
     ]
     open_mod_search_engines = [
         'pipi',
@@ -270,13 +277,13 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
     database_search = False
     open_mod_search = False
     for de_novo_engine in de_novo_engines:
-        if de_novo_engine in search_engine.lower():
+        if de_novo_engine in search_engine:
             de_novo = True
     for db_se in database_search_engines:
-        if db_se in search_engine.lower():
+        if db_se in search_engine:
             database_search = True
     for om_se in open_mod_search_engines:
-        if om_se in search_engine.lower():
+        if om_se in search_engine:
             open_mod_search = True
 
     if params['translations']['enzyme'] != 'nonspecific':
@@ -351,6 +358,7 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
             'Sequence Post AA',
             'Complies search criteria',
             'Conflicting uparam',
+            'Search Engine',
         ]
 
         for new_fieldname in new_fieldnames:
@@ -381,6 +389,7 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                     end = '\r'
                 )
 
+            line_dict['Search Engine'] = search_engine
             ##########################
             # Spectrum Title block
             # reformatting Spectrum Title,
@@ -390,14 +399,17 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                     OMSSA
                     MSGF+
                     X!Tandem
+                    pGlyco
                 '''
                 if 'RTINSECONDS=' in line_dict['Spectrum Title']:
                     line_2_split = line_dict['Spectrum Title'].split(' ')[0].strip()
+                elif line_dict['Spectrum Title'].endswith('.dta'):
+                    '.'.join(line_2_split = line_dict['Spectrum Title'].split('.')[:-2])
                 else:
                     line_2_split = line_dict['Spectrum Title']
                 line_dict['Spectrum Title'] = line_2_split
 
-                input_file_basename, spectrum_id, _spectrum_id, charge = line_2_split.split('.')
+                input_file_basename, spectrum_id, _spectrum_id, charge = line_2_split.split('.')[:4]
                 pure_input_file_name = ''
 
             elif 'scan=' in line_dict['Spectrum ID']:
@@ -423,6 +435,7 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                 '''
                 Valid for:
                     Novor
+                    DeepNovo
                     MSFragger
                 '''
                 pure_input_file_name = os.path.basename(
@@ -487,8 +500,14 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                 rt_corr_factor = 60
             line_dict['Retention Time (s)'] = float( retention_time_in_minutes ) * rt_corr_factor
 
+            # try:
             precursor_mz = scan_rt_lookup[ input_file_basename_for_rt_lookup ][
                 'scan_2_mz' ][ spectrum_id ]
+            # except:
+            #     print('\n\n\n')
+            #     print(input_file_basename_for_rt_lookup)
+            #     print('spectrum_id', spectrum_id, type(spectrum_id))
+            #     exit(1)
             line_dict['Exp m/z'] = round(precursor_mz, 10)
 
             #########################
@@ -502,8 +521,9 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                 ######################
                 # Modification block #
                 ######################
+
                 # check MSFragger crazy mod merge first...
-                if 'msfragger' in search_engine.lower():
+                if 'msfragger' in search_engine:
                     # we have to reformat the modifications
                     # M|14$15.994915|17$57.021465 to 15.994915:14;57.021465:17
                     # reformat it in Xtandem style
@@ -616,15 +636,29 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                 if fixed_mods != {}:
                     for pos, aminoacid in enumerate(line_dict['Sequence']):
                         if aminoacid in fixed_mods.keys():
-                            name = fixed_mods[ aminoacid ]
+                            name = fixed_mods[aminoacid]
                             tmp = '{0}:{1}'.format(
                                 name,
                                 pos + 1
                             )
+                            append_mod = True
                             if tmp in line_dict['Modifications']:
                                 # everything is ok :)
-                                pass
-                            else:
+                                append_mod = False
+                            elif ':{0}'.format(pos + 1) in line_dict['Modifications']:
+                                # there is a mod at that position but is it the right one ?
+                                for _m in line_dict['Modifications'].split(';'):
+                                    match = MOD_POS_PATTERN.search(_m)
+                                    if match is not None:
+                                        mod = match.group('modname')
+                                        pos = match.group('pos')
+                                        try:
+                                            if round(mod_dict[name]['mass'], 5) == round(float(mod), 5):
+                                                append_mod = False
+                                        except:
+                                            pass
+
+                            if append_mod:
                                 tmp_mods = line_dict['Modifications'].split(';')
                                 tmp_mods.append(tmp)
                                 line_dict['Modifications'] = ';'.join( tmp_mods )
@@ -634,8 +668,8 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                 # Note: masses are checked below to avoid any mismatch           #
                 ##################################################################
                 if use15N:
-                    if 'myrimatch' in search_engine.lower() or \
-                            'msgfplus_v9979' in search_engine.lower():
+                    if 'myrimatch' in search_engine or \
+                            'msgfplus_v9979' in search_engine:
                         for p in range(1,len(line_dict['Sequence'])+1):
                                 line_dict['Modifications'] = \
                                     line_dict['Modifications'].replace(
@@ -643,8 +677,8 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                                         '',
                                         1,
                                     )
-                    if 'myrimatch' in search_engine.lower():
-                        if 'Carboxymethyl' in line_dict['Modifications'] and cam == True:
+                    if 'myrimatch' in search_engine:
+                        if 'Carboxymethyl' in line_dict['Modifications'] and cam is True:
                             line_dict['Modifications'] = line_dict['Modifications'].replace(
                                 'Carboxymethyl',
                                 'Carbamidomethyl'
@@ -658,16 +692,26 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                 tmp_mods = []
                 tmp_mass_diff = []
                 for modification in line_dict['Modifications'].split(';'):
+                    raw_modification = modification
                     Nterm = False
                     Cterm = False
                     skip_mod = False
-                    if modification == '':
+                    if modification == '' or modification == 'null':
                         continue
                     pos, mod = None, None
-                    # print(modification)
-                    match = mod_pattern.search( modification )
-                    pos = int( match.group('pos') )
-                    mod = modification[ :match.start() ]
+                    if 'pglyco' in search_engine:
+                        try:
+                            pos = int(modification.split(',')[0])
+                            mod_pglyco = ','.join(modification.split(',')[1:])
+                            mod = mod_pglyco.split('[')[0]
+                        except:
+                            match = mod_pattern.search( modification )
+                            pos = int( match.group('pos') )
+                            mod = modification[ :match.start() ]
+                    else:
+                        match = mod_pattern.search( modification )
+                        pos = int( match.group('pos') )
+                        mod = modification[ :match.start() ]
                     assert pos is not None, '''
                             The format of the modification {0}
                             is not recognized by ursgal'''.format(
@@ -723,9 +767,9 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                         masses_2_test = [float_mod]
                         if use15N:
                             substract_15N_diff = False
-                            if aa in fixed_mods.keys() and 'msgfplus' in search_engine.lower() and pos != 0:
+                            if aa in fixed_mods.keys() and 'msgfplus' in search_engine and pos != 0:
                                 substract_15N_diff = True
-                            if 'msfragger' in search_engine.lower() and float_mod > 4:
+                            if 'msfragger' in search_engine and float_mod > 4:
                                 # maximum 15N labeling is 3.988 Da (R)
                                 substract_15N_diff = True
                             if substract_15N_diff:
@@ -759,10 +803,10 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                         for name in name_list:
                             if name in mod_dict.keys():
                                 if aa in mod_dict[name]['aa']:
-                                    modification = '{0}:{1}'.format(name,new_pos)
+                                    modification = '{0}:{1}'.format(name, new_pos)
                                     mapped_mod = True
                                 elif Nterm and '*' in mod_dict[name]['aa']:
-                                    modification = '{0}:{1}'.format(name,0)
+                                    modification = '{0}:{1}'.format(name, 0)
                                     mapped_mod = True
                                 else:
                                     continue
@@ -775,6 +819,7 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                                 mapped_mod = True
                                 skip_mod = True
                                 break
+
                         if open_mod_search is True and mapped_mod is False:
                             skip_mod = True
                             tmp_mass_diff.append('{0}:{1}'.format(mod, pos))
@@ -795,23 +840,30 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
                                     params['mods'],
                                     line_dict['Sequence']
                                 )
+                    if modification in tmp_mods:
+                        add_n_term_mod = False
+                        _mod, _pos = modification.split(':')
+                        _aa = line_dict['Sequence'][int(_pos) - 1]
+                        if _aa in mod_dict[_mod]['aa']:
+                            if 'N-term' in mod_dict[_mod]['aa']:
+                                add_n_term_mod = True
+                            elif 'Prot-N-term' in mod_dict[_mod]['aa']:
+                                add_n_term_mod = True
+                        if add_n_term_mod:
+                            modification = modification.replace(
+                                '{0}:1'.format(_mod),
+                                '{0}:0'.format(_mod)
+                            )
+                        # else:
+                        #     skip_mod = True
                     if skip_mod is True:
                         continue
-                    if modification in tmp_mods:
-                        if mod in n_term_replacement.keys() and pos == 1:
-                            if line_dict['Sequence'][0] in mod_dict[mod]['aa']:
-                                modification.replace(
-                                    '{0}:1'.format(mod),
-                                    '{0}:0'.format(mod)
-                                )
-                            else:
-                                continue
-                        else:
-                            continue
                     tmp_mods.append(modification)
-                if 'msfragger' in search_engine.lower():
+                if 'msfragger' in search_engine:
                     org_mass_diff = line_dict['Mass Difference']
                     tmp_mass_diff.append('{0}:n'.format(org_mass_diff))
+                if 'pglyco' in search_engine:
+                    line_dict['Sequence'] = line_dict['Sequence'].replace('J', 'N')
                 line_dict_update['Modifications'] = ';'.join(tmp_mods)
                 line_dict_update['Mass Difference'] = ';'.join(tmp_mass_diff)
                 #
@@ -885,6 +937,21 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
 
             line_dict_update = ze_only_buffer[ main_buffer_key ]
             line_dict.update( line_dict_update )
+
+            if 'pglyco' in search_engine:
+                try:
+                    Hex, HexNAc, NeuAc, NeuGc, dHex = line_dict[
+                        'Glycan'].strip(' ').split(' ')
+                except:
+                    print(line_dict['Glycan'])
+                    exit()
+                line_dict['Glycan'] = 'Hex({0})HexNac({1})NeuAc({2})NeuGc({3})dHex({4})'.format(
+                    Hex,
+                    HexNAc,
+                    NeuAc,
+                    NeuGc,
+                    dHex,
+                )
 
             # protein block, only for database search engine
             if database_search is True:
@@ -1049,7 +1116,10 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
         # build IsotopologueLibrary
         molecule2hill_dict = {}
         for molecule in all_molecules:
-            cc.use(molecule)
+            if 'X' in molecule.upper():
+                cc.use(molecule.replace('X', ''))
+            else:
+                cc.use(molecule)
             if use15N:
                 number_N = dc( cc['N'] )
                 cc['15N'] = number_N
@@ -1108,7 +1178,8 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
 
             collected_line_dict['uCalc m/z'] = calc_mz
             if database_search is True:
-                if collected_line_dict['Calc m/z'] == '':
+                if 'Calc m/z' in collected_line_dict.keys() and\
+                    collected_line_dict['Calc m/z'] == '':
                     collected_line_dict['Calc m/z'] = calc_mz
 
             collected_line_dict['Accuracy (ppm)'] = round(min_accuracy, 5)
@@ -1162,7 +1233,7 @@ def main(input_file=None, output_file=None, scan_rt_lookup=None,
 #         'Charge',
 #         'Is decoy',
 #     ]
-#     if 'msfragger' in search_engine.lower():
+#     if 'msfragger' in search_engine:
 #         psm.append('MSFragger:Neutral mass of peptide')
 #     if score_colname:
 #         psm.append(score_colname)
